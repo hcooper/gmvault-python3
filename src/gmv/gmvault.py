@@ -341,23 +341,23 @@ class GMVaulter(object):
         """
            Needs update
         """
-        if curr_metadata[gmvault_db.GmailStorer.ID_K] != new_metadata['X-GM-MSGID']:
+        if curr_metadata[gmvault_db.GmailStorer.ID_K] != new_metadata[b'X-GM-MSGID']:
             raise Exception("Gmail id has changed for %s" % (curr_metadata['id']))
                 
         #check flags   
-        prev_set = set(new_metadata['FLAGS'])    
+        prev_set = set(new_metadata[b'FLAGS'])    
         
         for flag in curr_metadata['flags']:
-            if flag not in prev_set:
+            if bytes(flag, 'utf-8') not in prev_set:
                 return True
             else:
-                prev_set.remove(flag)
+                prev_set.remove(bytes(flag, 'utf-8'))
         
         if len(prev_set) > 0:
             return True
         
         #check labels
-        prev_labels = set(new_metadata['X-GM-LABELS'])
+        prev_labels = set(new_metadata[b'X-GM-LABELS'])
         
         if chat_metadata: #add gmvault-chats labels
             prev_labels.add(gmvault_db.GmailStorer.CHAT_GM_LABEL)
@@ -519,7 +519,6 @@ class GMVaulter(object):
                         LOG.debug("metadata for %s already exists. Check if different." % (gid))
                         
                         if self._metadata_needs_update(curr_metadata, new_data[the_id], chat_metadata):
-                            
                             LOG.debug("%s with imap id %s and gmail id %s has changed. Updated it." % (a_type, the_id, gid))
                             
                             #restore everything at the moment

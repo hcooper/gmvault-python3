@@ -52,6 +52,7 @@ def mod_convert_INTERNALDATE(date_string, normalise_times=True):#pylint: disable
     """
        monkey patched convert_INTERNALDATE
     """
+    date_string = date_string.decode('utf-8')
     mon = INTERNALDATE_RE.match('INTERNALDATE "%s"' % date_string)
     if not mon:
         raise ValueError("couldn't parse date %r" % date_string)

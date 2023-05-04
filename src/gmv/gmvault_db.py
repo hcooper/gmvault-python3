@@ -286,6 +286,8 @@ class GmailStorer(object): #pylint:disable=R0902,R0904,R0914
         if matched:
             x_gmail_recv = matched.group('received').strip()
 
+        if subject:
+            subject = subject.decode('utf-8')
         return subject, msgid, x_gmail_recv
 
     def get_all_chats_gmail_ids(self):
@@ -378,7 +380,7 @@ class GmailStorer(object): #pylint:disable=R0902,R0904,R0914
         with open(meta_path, 'w') as meta_desc:
             # parse header fields to extract subject and msgid
             subject, msgid, received = self.parse_header_fields(
-                email_info[imap_utils.GIMAPFetcher.IMAP_HEADER_FIELDS_KEY])
+                email_info[imap_utils.GIMAPFetcher.IMAP_HEADER_FIELDS_KEY].decode('utf-8'))
 
             # need to convert labels that are number as string
             # come from imap_lib when label is a number
@@ -395,14 +397,14 @@ class GmailStorer(object): #pylint:disable=R0902,R0904,R0914
             meta_obj = {
                          self.ID_K         : email_info[imap_utils.GIMAPFetcher.GMAIL_ID],
                          self.LABELS_K     : labels,
-                         self.FLAGS_K      : email_info[imap_utils.GIMAPFetcher.IMAP_FLAGS],
+                         self.FLAGS_K      : [f.decode('utf-8') for f in email_info[imap_utils.GIMAPFetcher.IMAP_FLAGS]],
                          self.THREAD_IDS_K : email_info[imap_utils.GIMAPFetcher.GMAIL_THREAD_ID],
                          self.INT_DATE_K   : gmvault_utils.datetime2e(email_info[imap_utils.GIMAPFetcher.IMAP_INTERNALDATE]),
                          self.SUBJECT_K    : subject,
                          self.MSGID_K      : msgid,
                          self.XGM_RECV_K   : received
                        }
-
+            
             json.dump(meta_obj, meta_desc)
 
             meta_desc.flush()

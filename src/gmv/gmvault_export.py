@@ -42,7 +42,7 @@ class GMVaultExporter(object):
     CHATS_FOLDER = 'Chats'
     ARCHIVED_FOLDER = 'Archived' # Mails only in 'All Mail'
 
-    GM_ALL = re.sub(r'^\\', '', imap_utils.GIMAPFetcher.GENERIC_GMAIL_ALL)
+    GM_ALL = re.sub(r'^\\', '', imap_utils.GIMAPFetcher.GENERIC_GMAIL_ALL.decode('utf-8'))
     GM_INBOX = 'Inbox'
     GM_SEP = '/'
 

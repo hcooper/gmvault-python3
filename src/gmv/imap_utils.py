@@ -196,37 +196,36 @@ class GIMAPFetcher(object): #pylint:disable=R0902,R0904
     '''
     IMAP Class reading the information
     '''
-    GMAIL_EXTENSION     = 'X-GM-EXT-1'  # GMAIL capability
-    GMAIL_ALL           = '[Gmail]/All Mail' #GMAIL All Mail mailbox
+    GMAIL_EXTENSION     = b'X-GM-EXT-1'  # GMAIL capability
+    GMAIL_ALL           = b'[Gmail]/All Mail' #GMAIL All Mail mailbox
     
-    GENERIC_GMAIL_ALL   = '\\AllMail' # unlocalised GMAIL ALL
-    GENERIC_DRAFTS      = '\\Drafts' # unlocalised DRAFTS
+    GENERIC_GMAIL_ALL   = b'\\AllMail' # unlocalised GMAIL ALL
+    GENERIC_DRAFTS      = b'\\Drafts' # unlocalised DRAFTS
     GENERIC_GMAIL_CHATS = gmvault_const.GMAIL_UNLOCAL_CHATS   # unlocalised Chats names
     
     FOLDER_NAMES        = ['ALLMAIL', 'CHATS', 'DRAFTS']
     
-    GMAIL_ID            = 'X-GM-MSGID' #GMAIL ID attribute
-    GMAIL_THREAD_ID     = 'X-GM-THRID'
-    GMAIL_LABELS        = 'X-GM-LABELS'
+    GMAIL_ID            = b'X-GM-MSGID' #GMAIL ID attribute
+    GMAIL_THREAD_ID     = b'X-GM-THRID'
+    GMAIL_LABELS        = b'X-GM-LABELS'
     
-    IMAP_INTERNALDATE = 'INTERNALDATE'
-    IMAP_FLAGS        = 'FLAGS'
+    IMAP_INTERNALDATE = b'INTERNALDATE'
+    IMAP_FLAGS        = b'FLAGS'
     IMAP_ALL          = {'type':'imap', 'req':'ALL'}
     
-    EMAIL_BODY        = 'BODY[]'
+    EMAIL_BODY        = b'BODY[]'
     
-    GMAIL_SPECIAL_DIRS = ['\\Inbox', '\\Starred', '\\Sent', '\\Draft', '\\Important']
+    GMAIL_SPECIAL_DIRS = [b'\\Inbox', b'\\Starred', b'\\Sent', b'\\Draft', b'\\Important']
     
-    #GMAIL_SPECIAL_DIRS_LOWER = ['\\inbox', '\\starred', '\\sent', '\\draft', '\\important']
-    GMAIL_SPECIAL_DIRS_LOWER = ['\\inbox', '\\starred', '\\sent', '\\draft', '\\important', '\\trash']
+    GMAIL_SPECIAL_DIRS_LOWER = [b'\\inbox', b'\\starred', b'\\sent', b'\\draft', b'\\important', b'\\trash']
     
-    IMAP_BODY_PEEK     = 'BODY.PEEK[]' #get body without setting msg as seen
+    IMAP_BODY_PEEK     = b'BODY.PEEK[]' #get body without setting msg as seen
 
     #get the body info without setting msg as seen
-    IMAP_HEADER_PEEK_FIELDS = 'BODY.PEEK[HEADER.FIELDS (MESSAGE-ID SUBJECT X-GMAIL-RECEIVED)]' 
+    IMAP_HEADER_PEEK_FIELDS = b'BODY.PEEK[HEADER.FIELDS (MESSAGE-ID SUBJECT X-GMAIL-RECEIVED)]' 
 
     #key used to find these fields in the IMAP Response
-    IMAP_HEADER_FIELDS_KEY      = 'BODY[HEADER.FIELDS (MESSAGE-ID SUBJECT X-GMAIL-RECEIVED)]'
+    IMAP_HEADER_FIELDS_KEY      = b'BODY[HEADER.FIELDS (MESSAGE-ID SUBJECT X-GMAIL-RECEIVED)]'
     
     #GET_IM_UID_RE
     APPENDUID         = r'^[APPENDUID [0-9]* ([0-9]*)] \(Success\)$'
@@ -492,7 +491,7 @@ class GIMAPFetcher(object): #pylint:disable=R0902,R0904
         """
         if not self.server:
             raise Exception("GIMAPFetcher not connect to the GMAIL server")
-        
+
         return self.server.capabilities()
     
     @retry(3,1,2) # try 3 times to reconnect with a sleep time of 1 sec and a backoff of 2. The fourth time will wait 4 sec
@@ -899,9 +898,7 @@ def decode_labels(labels):
     """
     new_labels = []
     for label in labels:
-        if isinstance(label, (int, float, complex)):
-            label = str(label) 
-        new_labels.append(utf7_decode(label))
+        new_labels.append(label.decode('utf-8'))
 
     return new_labels
 
