@@ -19,7 +19,7 @@
 import collections
 
 ## {{{ http://code.activestate.com/recipes/576669/ (r18)
-class OrderedDict(dict, collections.MutableMapping):
+class OrderedDict(dict, collections.abc.MutableMapping):
     '''OrderedDict Class'''
     # Methods with direct access to underlying attributes
 
@@ -64,12 +64,12 @@ class OrderedDict(dict, collections.MutableMapping):
 
     # Methods with indirect access via the above methods
 
-    setdefault = collections.MutableMapping.setdefault
-    update     = collections.MutableMapping.update
-    pop        = collections.MutableMapping.pop
-    keys       = collections.MutableMapping.keys
-    values     = collections.MutableMapping.values
-    items      = collections.MutableMapping.items
+    setdefault = collections.abc.MutableMapping.setdefault
+    update     = collections.abc.MutableMapping.update
+    pop        = collections.abc.MutableMapping.pop
+    keys       = collections.abc.MutableMapping.keys
+    values     = collections.abc.MutableMapping.values
+    items      = collections.abc.MutableMapping.items
 
     def __repr__(self):
         pairs = ', '.join(map('%r: %r'.__mod__, list(self.items())))
