@@ -94,7 +94,7 @@ def handle_sync_imap_error(the_exception, the_id, error_report, src):
         try:
             #try to get the gmail_id
             curr = src.fetch(the_id, imap_utils.GIMAPFetcher.GET_GMAIL_ID) 
-        except Exception, _: #pylint:disable-msg=W0703
+        except Exception: #pylint:disable-msg=W0703
             curr = None
             LOG.critical("Error when trying to get gmail id for message with imap id %s." % (the_id))
             LOG.critical("Disconnect, wait for 20 sec then reconnect.")
@@ -128,7 +128,7 @@ def handle_sync_imap_error(the_exception, the_id, error_report, src):
                 #try to get the gmail_id
                 LOG.critical("One more attempt. Trying to fetch the Gmail ID for %s" % (the_id) )
                 curr = src.fetch(the_id, imap_utils.GIMAPFetcher.GET_GMAIL_ID) 
-            except Exception, _: #pylint:disable-msg=W0703
+            except Exception: #pylint:disable-msg=W0703
                 curr = None
             
             if curr:
@@ -174,7 +174,7 @@ class IMAPBatchFetcher(object):
                 single_data = self.src.fetch(the_id, self.request)
                 new_data.update(single_data)
                 
-            except Exception, error:
+            except Exception as error:
                     handle_sync_imap_error(error, the_id, self.error_report, self.src) #do everything in this handler
 
         return new_data
@@ -200,7 +200,7 @@ class IMAPBatchFetcher(object):
             
             return new_data
 
-        except imaplib.IMAP4.error, _:
+        except imaplib.IMAP4.error:
             new_data = self.individual_fetch(batch) 
     
         return new_data
@@ -339,7 +339,7 @@ class GMVaulter(object):
             if a_dir:
                 return a_gstorer.unbury_metadata(a_id, a_dir) 
             
-        except ValueError, json_error:
+        except ValueError as json_error:
             LOG.exception("Cannot read file %s. Try to fetch the data again" % ('%s.meta' % (a_id)), json_error )
         
         return None
@@ -492,7 +492,7 @@ class GMVaulter(object):
                                 
                                 #update local index id gid => index per directory to be thought out
                                 LOG.debug("Create and store chat with imap id %s, gmail id %s." % (the_id, gid))   
-                            except Exception, error:
+                            except Exception as error:
                                 handle_sync_imap_error(error, the_id, self.error_report, self.src) #do everything in this handler    
                     
                         nb_chats_processed += 1    
@@ -605,7 +605,7 @@ class GMVaulter(object):
                             
                             #update local index id gid => index per directory to be thought out
                             LOG.debug("Create and store email with imap id %s, gmail id %s." % (the_id, gid))   
-                        except Exception, error:
+                        except Exception as error:
                             handle_sync_imap_error(error, the_id, self.error_report, self.src) #do everything in this handler    
                     
                     nb_emails_processed += 1
@@ -758,7 +758,7 @@ class GMVaulter(object):
             last_id_index = imap_ids.index(imap_id)
             LOG.critical("Restart from gmail id %s (imap id %s)." % (last_id, imap_id))
             new_gmail_ids = imap_ids[last_id_index:]   
-        except Exception, _: #ignore any exception and try to get all ids in case of problems. pylint:disable=W0703
+        except Exception: #ignore any exception and try to get all ids in case of problems. pylint:disable=W0703
             #element not in keys return current set of keys
             LOG.critical("Error: Cannot restore from last restore gmail id. It is not in Gmail."\
                          " Sync the complete list of gmail ids requested from Gmail.")
@@ -874,7 +874,7 @@ class GMVaulter(object):
             keys = db_gmail_ids_info.keys()
             last_id_index = keys.index(last_id)
             LOG.critical("Restart from gmail id %s." % (last_id))
-        except ValueError, _:
+        except ValueError:
             #element not in keys return current set of keys
             LOG.error("Cannot restore from last restore gmail id. It is not in the disk database.")
         
@@ -993,7 +993,7 @@ class GMVaulter(object):
                 if (nb_emails_restored % 10) == 0:
                     self.save_lastid(self.OP_CHAT_RESTORE, gm_id)
                     
-            except imaplib.IMAP4.abort, abort:
+            except imaplib.IMAP4.abort as abort:
                 
                 # if this is a Gmvault SSL Socket error quarantine the email and continue the restore
                 if str(abort).find("=> Gmvault ssl socket error: EOF") >= 0:
@@ -1006,7 +1006,7 @@ class GMVaulter(object):
                 else:
                     raise abort
         
-            except imaplib.IMAP4.error, err:
+            except imaplib.IMAP4.error as err:
                 
                 LOG.error("Catched IMAP Error %s" % (str(err)))
                 LOG.exception(err)
@@ -1020,7 +1020,7 @@ class GMVaulter(object):
                     self.error_report['emails_in_quarantine'].append(gm_id) 
                 else:
                     raise err
-            except imap_utils.PushEmailError, p_err:
+            except imap_utils.PushEmailError as p_err:
                 LOG.error("Catch the following exception %s" % (str(p_err)))
                 LOG.exception(p_err)
                 
@@ -1031,7 +1031,7 @@ class GMVaulter(object):
                     self.error_report['emails_in_quarantine'].append(gm_id) 
                 else:
                     raise p_err          
-            except Exception, err:
+            except Exception as err:
                 LOG.error("Catch the following exception %s" % (str(err)))
                 LOG.exception(err)
                 raise err
@@ -1109,7 +1109,7 @@ class GMVaulter(object):
                 if (nb_emails_restored % 10) == 0:
                     self.save_lastid(self.OP_CHAT_RESTORE, gm_id)
                     
-            except imaplib.IMAP4.abort, abort:
+            except imaplib.IMAP4.abort as abort:
                 
                 # if this is a Gmvault SSL Socket error quarantine the email and continue the restore
                 if str(abort).find("=> Gmvault ssl socket error: EOF") >= 0:
@@ -1122,7 +1122,7 @@ class GMVaulter(object):
                 else:
                     raise abort
         
-            except imaplib.IMAP4.error, err:
+            except imaplib.IMAP4.error as err:
                 
                 LOG.error("Catched IMAP Error %s" % (str(err)))
                 LOG.exception(err)
@@ -1136,7 +1136,7 @@ class GMVaulter(object):
                     self.error_report['emails_in_quarantine'].append(gm_id) 
                 else:
                     raise err
-            except imap_utils.PushEmailError, p_err:
+            except imap_utils.PushEmailError as p_err:
                 LOG.error("Catch the following exception %s" % (str(p_err)))
                 LOG.exception(p_err)
                 
@@ -1147,7 +1147,7 @@ class GMVaulter(object):
                     self.error_report['emails_in_quarantine'].append(gm_id) 
                 else:
                     raise p_err          
-            except Exception, err:
+            except Exception as err:
                 LOG.error("Catch the following exception %s" % (str(err)))
                 LOG.exception(err)
                 raise err
@@ -1227,7 +1227,7 @@ class GMVaulter(object):
                     # get list of labels to create (do a union with labels to create)
                     labels_to_create.update([ label for label in labels if label not in existing_labels])                  
                 
-                except Exception, err:
+                except Exception as err:
                     handle_restore_imap_error(err, gm_id, db_gmail_ids_info, self)
 
             #create the non existing labels and update existing labels
@@ -1242,7 +1242,7 @@ class GMVaulter(object):
                 self.src.select_folder('ALLMAIL') #go to ALL MAIL to make STORE usable
                 for label in labels_to_apply.keys():
                     self.src.apply_labels_to(labels_to_apply[label], [label]) 
-            except Exception, err:
+            except Exception as err:
                 LOG.error("Problem when applying labels %s to the following ids: %s" %(label, labels_to_apply[label]), err)
                 if isinstance(err, imaplib.IMAP4.abort) and str(err).find("=> Gmvault ssl socket error: EOF") >= 0:
                     # if this is a Gmvault SSL Socket error quarantine the email and continue the restore
@@ -1351,7 +1351,7 @@ class GMVaulter(object):
                     # get list of labels to create (do a union with labels to create)
                     labels_to_create.update([ label for label in labels if label not in existing_labels])                  
                 
-                except Exception, err:
+                except Exception as err:
                     handle_restore_imap_error(err, gm_id, db_gmail_ids_info, self)
 
             #create the non existing labels and update existing labels
@@ -1369,7 +1369,7 @@ class GMVaulter(object):
                 LOG.debug("Changed dir. Operation time = %s ms" % (t.elapsed_ms()))
                 for label in labels_to_apply.keys():
                     self.src.apply_labels_to(labels_to_apply[label], [label]) 
-            except Exception, err:
+            except Exception as err:
                 LOG.error("Problem when applying labels %s to the following ids: %s" %(label, labels_to_apply[label]), err)
                 if isinstance(err, imaplib.IMAP4.abort) and str(err).find("=> Gmvault ssl socket error: EOF") >= 0:
                     # if this is a Gmvault SSL Socket error quarantine the email and continue the restore
@@ -1490,7 +1490,7 @@ class GMVaulter(object):
                     # get list of labels to create (do a union with labels to create)
                     labels_to_create.update([ label for label in labels if label not in existing_labels])                  
                 
-                except Exception, err:
+                except Exception as err:
                     handle_restore_imap_error(err, gm_id, db_gmail_ids_info, self)
 
             #create the non existing labels and update existing labels
@@ -1582,7 +1582,7 @@ class LabellingThread(Process):
                     for label in labels_to_apply.keys():
                         LOG.critical("Apply %s to %s" % (label, labels_to_apply[label]))
                         self.src.apply_labels_to(labels_to_apply[label], [label]) 
-                except Exception, err:
+                except Exception as err:
                     LOG.error("Problem when applying labels %s to the following ids: %s" %(label, labels_to_apply[label]), err)
                 finally:
                     #self.queue.task_done()

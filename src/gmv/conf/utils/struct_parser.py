@@ -266,7 +266,7 @@ class Compiler(object):
         try:
             tokenizer = Tokenizer()
             tokenizer.tokenize(a_to_compile_str, self._tokens_to_ignore)
-        except tokenize.TokenError, err:
+        except tokenize.TokenError as err:
             
             #translate this error into something understandable. 
             #It is because the bloody tokenizer counts the brackets
@@ -287,7 +287,7 @@ class Compiler(object):
         try:
             tokenizer = Tokenizer()
             tokenizer.tokenize(a_to_compile_str, self._tokens_to_ignore)
-        except tokenize.TokenError, err:
+        except tokenize.TokenError as err:
             
             #translate this error into something understandable. 
             #It is because the bloody tokenizer counts the brackets

@@ -101,7 +101,7 @@ class TestSandbox(unittest.TestCase): #pylint:disable-msg=R0904
         try:
             raise Exception("Exception. This is my exception")
             self.fail("Should never arrive here") #pylint:disable-msg=W0101
-        except Exception, err: #pylint:disable-msg=W0101, W0703
+        except Exception as err: #pylint:disable-msg=W0101, W0703
             LOG.exception("error,", err)
         
         LOG.critical("On Critical")
@@ -214,8 +214,8 @@ class TestSandbox(unittest.TestCase): #pylint:disable-msg=R0904
         imap_fetch = MonkeyIMAPFetcher(host = None, port = None, login = None, credential = None)
         try:
             imap_fetch.push_email(None, None, None, None)
-        #except Exception, err:
-        except imaplib.IMAP4.error, err:
+        #except Exception as err:
+        except imaplib.IMAP4.error as err:
             self.assertEquals('GIMAPFetcher cannot restore email in myaccount@gmail.com account.', str(err))
         
         self.assertEquals(imap_fetch.connect_nb, 3)

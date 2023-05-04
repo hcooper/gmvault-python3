@@ -409,7 +409,7 @@ class Conf(object):
             # memorize conf file path
             self._configuration_file_path = a_file
 
-        except Exception, exce:
+        except Exception as exce:
             print "Can't read the config file %s" % a_file
             print "Current executing from dir = %s\n" % os.getcwd()
             raise exce
@@ -639,7 +639,7 @@ class Conf(object):
                         dummy = res.get_value()
                     else:
                         dummy = self._sections[group][self.optionxform(option)]
-                except KeyError, _: #IGNORE:W0612
+                except KeyError: #IGNORE:W0612
                     raise exceptions.SubstitutionError(lineno, location, "Property %s[%s] "\
                                                        "doesn't exist in this configuration file \n" \
                                                        % (group, option))
@@ -701,7 +701,7 @@ class Conf(object):
         try:
             compiler = struct_parser.Compiler()
             return compiler.compile_list(val)
-        except struct_parser.CompilerError, err: 
+        except struct_parser.CompilerError as err: 
             raise exceptions.Error(err.message)
     
     def getlist(self, section, option, default=None, fail_if_missing=False):
@@ -722,7 +722,7 @@ class Conf(object):
         try:
             compiler = struct_parser.Compiler()
             return compiler.compile_dict(val)
-        except struct_parser.CompilerError, err: 
+        except struct_parser.CompilerError as err: 
             raise exceptions.Error(err.message)
         
     @classmethod

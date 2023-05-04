@@ -153,7 +153,7 @@ class CredentialHelper(object):
             try:
                 with open(user_oauth_file_path) as oauth_file:
                     oauth_result = json.load(oauth_file)
-            except Exception, _: #pylint: disable-msg=W0703
+            except Exception: #pylint: disable-msg=W0703
                 LOG.critical("Cannot read oauth credentials from %s. Force oauth credentials renewal." % user_oauth_file_path)
                 LOG.critical("=== Exception traceback ===")
                 LOG.critical(gmvault_utils.get_exception_traceback())
@@ -262,7 +262,7 @@ class CredentialHelper(object):
 
       try:
         response = urllib2.urlopen(request_url, urllib.urlencode(params)).read()
-      except Exception, err: #pylint: disable-msg=W0703
+      except Exception as err: #pylint: disable-msg=W0703
         LOG.critical("Error: Problems when trying to connect to Google oauth2 endpoint: %s.\n" % (request_url))
         raise err
 
@@ -301,7 +301,7 @@ class CredentialHelper(object):
 
         try:
             response = urllib2.urlopen(request_url, urllib.urlencode(params)).read()
-        except Exception, err: #pylint: disable-msg=W0703
+        except Exception as err: #pylint: disable-msg=W0703
             LOG.critical("Error: Problems when trying to connect to Google oauth2 endpoint: %s." % (request_url))
             raise err
 
@@ -325,7 +325,7 @@ class CredentialHelper(object):
         if use_webbrowser:
             try:
                 webbrowser.open(str(permission_url))
-            except Exception, err: #pylint: disable-msg=W0703
+            except Exception as err: #pylint: disable-msg=W0703
                 LOG.critical("Error: %s.\n" % (err) )
                 LOG.critical("=== Exception traceback ===")
                 LOG.critical(gmvault_utils.get_exception_traceback())

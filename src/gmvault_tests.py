@@ -82,7 +82,7 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         
         try:
             gimap.connect()
-        except ssl.SSLError, err:
+        except ssl.SSLError as err:
             
             msg = str(err)
             
