@@ -261,7 +261,7 @@ class CredentialHelper(object):
       request_url = '%s/%s' % (account_base_url, 'o/oauth2/token')
 
       try:
-        response = urllib.request.urlopen(request_url, urllib.parse.urlencode(params)).read()
+        response = urllib.request.urlopen(request_url, urllib.parse.urlencode(params).encode('utf-8')).read()
       except Exception as err: #pylint: disable-msg=W0703
         LOG.critical("Error: Problems when trying to connect to Google oauth2 endpoint: %s.\n" % (request_url))
         raise err
