@@ -6,7 +6,7 @@ Created on Nov 27, 2012
 """
 import json
 
-string_to_test = u"Чаты"
+string_to_test = "Чаты"
 labels = [ 0, string_to_test ]
 
 def format(self, record):
@@ -52,22 +52,22 @@ def data_to_test():
     new_labels = []
     
     for label in metadata['labels']:
-        if isinstance(label, (int, long, float, complex)):
-            label = unicode(str(label))
+        if isinstance(label, (int, float, complex)):
+            label = str(str(label))
         
         new_labels.append(label)
     
     metadata['labels'] = new_labels
     
-    print("metadata = %s\n" % metadata)
+    print(("metadata = %s\n" % metadata))
     
-    print("type(metadata['labels'][0]) = %s" % (type(metadata['labels'][0])))  
+    print(("type(metadata['labels'][0]) = %s" % (type(metadata['labels'][0]))))  
     
-    print("metadata['labels'][0] = %s" % (metadata['labels'][0]))  
+    print(("metadata['labels'][0] = %s" % (metadata['labels'][0])))  
     
-    print("type(metadata['labels'][1]) = %s" % (type(metadata['labels'][1])))  
+    print(("type(metadata['labels'][1]) = %s" % (type(metadata['labels'][1]))))  
     
-    print("metadata['labels'][1] = %s" % (metadata['labels'][1]))  
+    print(("metadata['labels'][1] = %s" % (metadata['labels'][1])))  
     
 
 def header_regexpr_test():
@@ -83,19 +83,19 @@ def header_regexpr_test():
     matched = gmvault_db.GmailStorer.HF_SUB_RE.search(the_str)
     if matched:
         subject = matched.group('subject')
-        print("subject matched = <%s>\n" % (subject))
+        print(("subject matched = <%s>\n" % (subject)))
         
     # look for a msg id
     matched = gmvault_db.GmailStorer.HF_MSGID_RE.search(the_str)
     if matched:
         msgid = matched.group('msgid')
-        print("msgid matched = <%s>\n" % (msgid))
+        print(("msgid matched = <%s>\n" % (msgid)))
 
     
     matched = gmvault_db.GmailStorer.HF_XGMAIL_RECV_RE.search(the_str)
     if matched:
         received = matched.group('received').strip()
-        print("matched = <%s>\n" % (received))
+        print(("matched = <%s>\n" % (received)))
 
 if __name__ == '__main__':
     header_regexpr_test()

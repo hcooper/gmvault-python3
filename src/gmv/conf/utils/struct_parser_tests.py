@@ -105,7 +105,7 @@ class TestParser(unittest.TestCase): #pylint: disable=R0904
         
         the_result = compiler.compile_list(the_string)
         
-        self.assertEqual(the_result, [ u'[Gmail]/Чаты', 'z' ])
+        self.assertEqual(the_result, [ '[Gmail]/Чаты', 'z' ])
         
     def test_special_character_in_string(self):#pylint: disable=C0103
         """ simple list without bracket test """

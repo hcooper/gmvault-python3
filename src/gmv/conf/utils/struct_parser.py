@@ -18,7 +18,7 @@
 '''
 import tokenize
 import token
-import StringIO
+import io
 
 class TokenizerError(Exception):
     """Base class for All exceptions"""
@@ -109,7 +109,7 @@ class Tokenizer(object):
             Raises:
                exception TokenizerError if the syntax of the aString string is incorrect
         """
-        g_info = tokenize.generate_tokens(StringIO.StringIO(a_program).readline)   # tokenize the string
+        g_info = tokenize.generate_tokens(io.StringIO(a_program).readline)   # tokenize the string
         
         for toknum, tokval, tokbeg, tokend, tokline  in g_info:
             if token.tok_name[toknum] not in a_eatable_token_types:
@@ -124,7 +124,7 @@ class Tokenizer(object):
             self._current = tok
             yield tok
         
-    def next(self):
+    def __next__(self):
         """ get next token.
           
             Returns:
@@ -156,7 +156,7 @@ class Tokenizer(object):
         if self._current.value != what :
             raise TokenizerError("Expected '%s' but instead found '%s'" % (what, self._current.value))
         else:
-            return self.next()
+            return next(self)
         
     def consume_while_next_token_is_in(self, a_token_types_list):
         """
@@ -174,7 +174,7 @@ class Tokenizer(object):
         
         while True:
         
-            tok = self.next()
+            tok = next(self)
         
             if tok.type not in a_token_types_list:
                 return tok
@@ -194,7 +194,7 @@ class Tokenizer(object):
         tok = self.current_token()
         
         while tok.type in a_token_types_list:
-            tok = self.next()
+            tok = next(self)
         
         return tok
     
@@ -212,7 +212,7 @@ class Tokenizer(object):
                exception  BadTokenError if a Token Type that is not in a_token_types_list is found
         """
         
-        tok = self.next()
+        tok = next(self)
         
         if tok.type not in a_token_types_list:
             raise TokenizerError("Expected '%s' but instead found '%s'" % (a_token_types_list, tok))
@@ -275,9 +275,9 @@ class Compiler(object):
             else:
                 raise CompilerError(err)
             
-            print("Err = %s\n" % (err))
+            print(("Err = %s\n" % (err)))
         
-        tokenizer.next()
+        next(tokenizer)
         
         return self._compile_list(tokenizer)
     
@@ -296,9 +296,9 @@ class Compiler(object):
             else:
                 raise CompilerError(err)
             
-            print("Err = %s\n" % (err))
+            print(("Err = %s\n" % (err)))
         
-        tokenizer.next()
+        next(tokenizer)
         
         return self._compile_dict(tokenizer)
 
@@ -313,7 +313,7 @@ class Compiler(object):
             #look for an open bracket
             if the_token.type == 'OP' and the_token.value == '{':
                
-                the_token = a_tokenizer.next()
+                the_token = next(a_tokenizer)
                 
                 while True:
                    
@@ -362,7 +362,7 @@ class Compiler(object):
                                 % (the_token.type, the_token.value), the_token.begin[0], the_token.begin[1])
         else:
             #eat it
-            the_token = a_tokenizer.next()
+            the_token = next(a_tokenizer)
         
         #get value
         # it can be a
@@ -379,7 +379,7 @@ class Compiler(object):
             val = self._compile_list(a_tokenizer)
             
             # positioning to the next token
-            the_token = a_tokenizer.next()
+            the_token = next(a_tokenizer)
             
         elif the_token.value == '{' and the_token.type == 'OP':
             
@@ -387,7 +387,7 @@ class Compiler(object):
             val = self._compile_dict(a_tokenizer)
             
             # positioning to the next token
-            the_token = a_tokenizer.next()
+            the_token = next(a_tokenizer)
         
         elif the_token.value == '(' and the_token.type == 'OP':
             
@@ -395,7 +395,7 @@ class Compiler(object):
             val = self._compile_tuple(a_tokenizer)
             
             # positioning to the next token
-            the_token = a_tokenizer.next()
+            the_token = next(a_tokenizer)
             
         else:
             raise CompilerError("unexpected token (type: %s, value : %s)" \
@@ -404,7 +404,7 @@ class Compiler(object):
         
         #if we have a comma then eat it as it means that we will have more than one values
         if the_token.type == 'OP' and the_token.value == ',':
-            the_token = a_tokenizer.next() 
+            the_token = next(a_tokenizer) 
             
         return (key, val)               
         
@@ -424,7 +424,7 @@ class Compiler(object):
                 if len(the_token.value) >= 3 and the_token.value[:2] == "u'":
                     #unicode string
                     #dummy = unicode(the_token.value[2:-1], 'utf_8') #decode from utf-8 encoding not necessary if read full utf-8 file
-                    dummy = unicode(the_token.value[2:-1])
+                    dummy = str(the_token.value[2:-1])
                 else:
                     #ascii string
                     # the value contains the quote or double quotes so remove them always
@@ -449,7 +449,7 @@ class Compiler(object):
             else:
                 val = dummy
             
-            the_token = a_tokenizer.next()
+            the_token = next(a_tokenizer)
             
         return val
     
@@ -474,19 +474,19 @@ class Compiler(object):
                 else:
                     result.append(self._compile_tuple(a_tokenizer))
                     
-                the_token = a_tokenizer.next()
+                the_token = next(a_tokenizer)
             
             elif the_token.value == '{' and the_token.type == 'OP':
                
                 result.append(self._compile_dict(a_tokenizer))
                     
-                the_token = a_tokenizer.next()
+                the_token = next(a_tokenizer)
             
             elif the_token.value == '[' and the_token.type == 'OP':
                
                 result.append(self._compile_list(a_tokenizer))
                     
-                the_token = a_tokenizer.next()
+                the_token = next(a_tokenizer)
                     
             elif the_token.type == 'OP' and the_token.value == ')':
                 # end of list return result
@@ -500,7 +500,7 @@ class Compiler(object):
             # the comma case
             elif the_token.type == 'OP' and the_token.value == ',':
                 # just eat it
-                the_token = a_tokenizer.next()
+                the_token = next(a_tokenizer)
                 
             elif the_token.type in ('STRING', 'NUMBER', 'NAME'):
                 
@@ -549,19 +549,19 @@ class Compiler(object):
                 else:
                     result.append(self._compile_list(a_tokenizer))
                     
-                the_token = a_tokenizer.next()
+                the_token = next(a_tokenizer)
             
             elif the_token.value == '(' and the_token.type == 'OP':
                
                 result.append(self._compile_tuple(a_tokenizer))
                     
-                the_token = a_tokenizer.next()
+                the_token = next(a_tokenizer)
             
             elif the_token.value == '{' and the_token.type == 'OP':
                
                 result.append(self._compile_dict(a_tokenizer))
                     
-                the_token = a_tokenizer.next()
+                the_token = next(a_tokenizer)
                     
             elif the_token.type == 'OP' and the_token.value == ']':
                 # end of list return result
@@ -574,7 +574,7 @@ class Compiler(object):
             # the comma case
             elif the_token.type == 'OP' and the_token.value == ',':
                 # just eat it
-                the_token = a_tokenizer.next()
+                the_token = next(a_tokenizer)
                 
             elif the_token.type in ('STRING', 'NUMBER', 'NAME'):
                 

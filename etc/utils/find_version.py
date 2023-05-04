@@ -25,7 +25,7 @@ def find_version(path):
         for line in f:
             index = line.find('GMVAULT_VERSION = "')
             if index > -1:
-                print(line[index+19:-2])
+                print((line[index+19:-2]))
                 res = line[index+19:-2]
                 return res.strip()
 

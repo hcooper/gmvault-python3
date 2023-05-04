@@ -25,7 +25,7 @@ def find_version(path):
         for line in f:
             index = line.find('GMVAULT_VERSION="')
             if index > -1:
-                print(line[index+17:-2])
+                print((line[index+17:-2]))
                 return line[index+17:-2]
 
     raise Exception("Cannot find GMVAULT_VERSION in %s\n" % (path))
@@ -43,7 +43,7 @@ def add_version(a_input, a_output, a_version):
 if __name__ == '__main__':
 
     if len(sys.argv) < 4:
-        print("Error: need more parameters for %s." % (sys.argv[0]))
+        print(("Error: need more parameters for %s." % (sys.argv[0])))
         print("Usage: add_version.py input_path output_path version.")
         exit(-1)
 

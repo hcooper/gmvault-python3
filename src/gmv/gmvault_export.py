@@ -73,7 +73,7 @@ class GMVaultExporter(object):
     def printable_label_list(self, labels):
         """helper to print a list of labels"""
         labels = [l.encode('ascii', 'backslashreplace') for l in labels]
-        return u'; '.join(labels)
+        return '; '.join(labels)
 
     def export_ids(self, kind, ids, default_folder, use_labels):
         """ export organised by ids """
@@ -251,7 +251,7 @@ class MBox(Mailbox):
         self.open = dict()
 
     def close(self):
-        for _, m in self.open.items():
+        for _, m in list(self.open.items()):
             m.close()
 
     def subdir(self, label):

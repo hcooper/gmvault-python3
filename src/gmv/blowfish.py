@@ -59,7 +59,7 @@ class Blowfish:
     DECRYPT = 1
  
     # For _round()
-    _MODULUS = 2L ** 32
+    _MODULUS = 2 ** 32
  
     # CTR constants
     _BLOCK_SIZE = 8
@@ -355,7 +355,7 @@ class Blowfish:
         # key with the p-boxes
         key_len = len(key)
         index = 0
-        for i in xrange(len(self._p_boxes)):
+        for i in range(len(self._p_boxes)):
             self._p_boxes[i] = self._p_boxes[i] ^ (
              (ord(key[index % key_len]) << 24) +
              (ord(key[(index + 1) % key_len]) << 16) +
@@ -368,14 +368,14 @@ class Blowfish:
         l = r = 0
  
         # Begin chain replacing the p-boxes
-        for i in xrange(0, len(self._p_boxes), 2):
+        for i in range(0, len(self._p_boxes), 2):
             (l, r) = self.cipher(l, r, self.ENCRYPT)
             self._p_boxes[i] = l
             self._p_boxes[i + 1] = r
  
         # Chain replace the s-boxes
-        for i in xrange(len(self._s_boxes)):
-            for j in xrange(0, len(self._s_boxes[i]), 2):
+        for i in range(len(self._s_boxes)):
+            for j in range(0, len(self._s_boxes[i]), 2):
                 (l, r) = self.cipher(l, r, self.ENCRYPT)
                 self._s_boxes[i][j] = l
                 self._s_boxes[i][j + 1] = r
@@ -513,11 +513,11 @@ class Blowfish:
         """
         # Perform all ops as longs then and out the last 32-bits to
         # obtain the integer
-        f = long(self._s_boxes[0][(xl & 0xFF000000) >> 24])
-        f += long(self._s_boxes[1][(xl & 0x00FF0000) >> 16])
+        f = int(self._s_boxes[0][(xl & 0xFF000000) >> 24])
+        f += int(self._s_boxes[1][(xl & 0x00FF0000) >> 16])
         f %= self._MODULUS
-        f ^= long(self._s_boxes[2][(xl & 0x0000FF00) >> 8])
-        f += long(self._s_boxes[3][(xl & 0x000000FF)])
+        f ^= int(self._s_boxes[2][(xl & 0x0000FF00) >> 8])
+        f += int(self._s_boxes[3][(xl & 0x000000FF)])
         f %= self._MODULUS
         return f & 0xFFFFFFFF
  
@@ -528,23 +528,23 @@ if __name__ == '__main__':
  
     def _demo(heading, source, encrypted, decrypted):
         """demo method """
-        print heading
-        print "\tSource: %(source)s" % {
+        print(heading)
+        print("\tSource: %(source)s" % {
          'source': source,
-        }
-        print "\tEncrypted: %(encrypted)s" % {
+        })
+        print("\tEncrypted: %(encrypted)s" % {
          'encrypted': encrypted,
-        }
-        print "\tDecrypted: %(decrypted)s" % {
+        })
+        print("\tDecrypted: %(decrypted)s" % {
          'decrypted': decrypted,
-        }
-        print
+        })
+        print()
  
     key = 'This is a test key'
     cipher = Blowfish(key)
  
     # Encryption processing
-    (xl, xr) = (123456L, 654321L)
+    (xl, xr) = (123456, 654321)
     (cl, cr) = cipher.cipher(xl, xr, cipher.ENCRYPT)
     (dl, dr) = cipher.cipher(cl, cr, cipher.DECRYPT)
     _demo("Testing encryption", (xl, xr), (cl, cr), (dl, dr))
@@ -564,8 +564,8 @@ if __name__ == '__main__':
     _demo("Testing CTR logic", text, repr(crypted), decrypted)
  
     # Test speed
-    print "Testing speed"
-    test_strings = [''.join(("The quick brown fox jumps over the lazy dog", str(i),)) for i in xrange(1000)]
+    print("Testing speed")
+    test_strings = [''.join(("The quick brown fox jumps over the lazy dog", str(i),)) for i in range(1000)]
     n = 0
     t1 = time.time()
     while True:
@@ -575,8 +575,8 @@ if __name__ == '__main__':
         t2 = time.time()
         if t2 - t1 >= 5.0:
             break
-    print "%(count)i encryptions in %(time)0.1f seconds: %(throughput)0.1f enc/s" % {
+    print("%(count)i encryptions in %(time)0.1f seconds: %(throughput)0.1f enc/s" % {
      'count': n,
      'time': t2 - t1,
      'throughput': n / (t2 - t1),
-    }
+    })

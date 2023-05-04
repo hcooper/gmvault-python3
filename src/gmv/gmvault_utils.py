@@ -26,12 +26,12 @@ import calendar
 import fnmatch
 import functools
 
-import StringIO
+import io
 import sys
 import traceback
 import random 
 import locale
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import chardet
 
 import gmv.log_utils as log_utils
@@ -115,7 +115,7 @@ def get_exception_traceback():
                
     """
    
-    the_file = StringIO.StringIO()
+    the_file = io.StringIO()
     exception_type, exception_value, exception_traceback = sys.exc_info() #IGNORE:W0702
     traceback.print_exception(exception_type, exception_value, exception_traceback, file = the_file)
     return the_file.getvalue()
@@ -130,7 +130,7 @@ def remove_consecutive_spaces_and_strip(a_str):
        e.g "two  spaces" = "two spaces"
     """
     #return re.sub("\s{2,}", " ", a_str, flags=re.U).strip()
-    return MULTI_SPACES_RE.sub(u" ", a_str).strip()
+    return MULTI_SPACES_RE.sub(" ", a_str).strip()
 
 
 TIMER_SUFFIXES = ['y', 'w', 'd', 'h', 'm', 's']
@@ -411,7 +411,7 @@ def __rmgeneric(path, __func__):
         __func__(path)
         #print 'Removed ', path
     except OSError as strerror: #IGNORE:W0612
-        print """Error removing %(path)s, %(error)s """ % {'path' : path, 'error': strerror }
+        print("""Error removing %(path)s, %(error)s """ % {'path' : path, 'error': strerror })
             
 def delete_all_under(path, delete_top_dir = False):
     """ delete all files and directories under path """
@@ -502,14 +502,14 @@ def guess_encoding(byte_str, use_encoding_list=True):
     """
     encoding = None
 
-    if type(byte_str) == type(unicode()):
+    if type(byte_str) == type(str()):
        raise GuessEncoding("Error. The passed string is a unicode string and not a byte string")
 
     if use_encoding_list:
         encoding_list = get_conf_defaults().get('Localisation', 'encoding_guess_list', DEFAULT_ENC_LIST)
         for enc in encoding_list:
            try:
-              unicode(byte_str ,enc,"strict")
+              str(byte_str ,enc,"strict")
               encoding = enc
            except:
               pass
@@ -548,12 +548,12 @@ def convert_to_unicode(a_str):
             encoding = guess_encoding(a_str[:20000], use_encoding_list = False)
 
         LOG.debug("Convert to %s" % (encoding))
-        u_str = unicode(a_str, encoding = encoding) #convert to unicode with given encoding
+        u_str = str(a_str, encoding = encoding) #convert to unicode with given encoding
     except Exception as e:
         LOG.debug("Exception: %s" % (e))
         LOG.info("Warning: Guessed encoding = (%s). Ignore those characters" % (encoding if encoding else "Not defined"))
         #try utf-8
-        u_str = unicode(a_str, encoding="utf-8", errors='replace')
+        u_str = str(a_str, encoding="utf-8", errors='replace')
 
     return u_str
 
@@ -562,7 +562,7 @@ def convert_argv_to_unicode(a_str):
        Convert command line individual arguments (argv to unicode)
     """
     #if str is already unicode do nothing and return the str
-    if type(a_str) == type(unicode()):
+    if type(a_str) == type(str()):
         return a_str
 
     #encoding can be forced from conf
@@ -591,7 +591,7 @@ def convert_argv_to_unicode(a_str):
        get_exception_traceback()
        LOG.info("Convertion of %s from %s to a unicode failed. Will now convert to unicode using utf-8 encoding and ignoring errors (non utf-8 characters will be eaten)." % (a_str, terminal_encoding))
        LOG.info("Please set properly the Terminal encoding or use the [Localisation]:terminal_encoding property to set it.")
-       u_str = unicode(a_str, encoding='utf-8', errors='ignore')
+       u_str = str(a_str, encoding='utf-8', errors='ignore')
 
     return u_str
 
@@ -698,7 +698,7 @@ def get_conf_filepath():
 
 def chunker(seq, size):
     """Returns the contents of `seq` in chunks of up to `size` items."""
-    return (seq[pos:pos + size] for pos in xrange(0, len(seq), size))
+    return (seq[pos:pos + size] for pos in range(0, len(seq), size))
 
 
 def escape_url(text):
@@ -707,7 +707,7 @@ def escape_url(text):
   :param text: the escaped url
   :return: escaped url
   """
-  return urllib.quote(text, safe='~-._')
+  return urllib.parse.quote(text, safe='~-._')
 
 
 def unescape_url(text):
@@ -716,7 +716,7 @@ def unescape_url(text):
   :param text:
   :return: unescaped url
   """
-  return urllib.unquote(text)
+  return urllib.parse.unquote(text)
 
 def format_url_params(params):
   """
@@ -725,6 +725,6 @@ def format_url_params(params):
   :return: A URL query string version of the given dict.
   """
   param_elements = []
-  for param in sorted(params.iteritems(), key=lambda x: x[0]):
+  for param in sorted(iter(params.items()), key=lambda x: x[0]):
     param_elements.append('%s=%s' % (param[0], escape_url(param[1])))
   return '&'.join(param_elements)

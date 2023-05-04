@@ -97,7 +97,7 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         
         gimap.connect()
         
-        self.assertEquals(('IMAP4REV1', 'UNSELECT', \
+        self.assertEqual(('IMAP4REV1', 'UNSELECT', \
                            'IDLE', 'NAMESPACE', \
                            'QUOTA', 'ID', 'XLIST', \
                            'CHILDREN', 'X-GM-EXT-1', \
@@ -111,7 +111,7 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         
         gimap.connect()
         
-        self.assertEquals( True , gimap.check_gmailness())
+        self.assertEqual( True , gimap.check_gmailness())
     
     def ztest_gmvault_compression(self):
         """
@@ -123,12 +123,12 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         
         gimap.enable_compression()
         
-        self.assertEquals( True , gimap.check_gmailness())
+        self.assertEqual( True , gimap.check_gmailness())
         
         criteria = ['Before 1-Jan-2011']
         ids = gimap.search(criteria)
         
-        self.assertEquals(len(ids), 33577)
+        self.assertEqual(len(ids), 33577)
         
     def ztest_created_nested_dirs(self):
         """ Try to create nested dirs """
@@ -142,7 +142,7 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         
         folders = [ the_dir for (_, _, the_dir) in folders_info ]
         
-        print('folders %s\n' %(folders))
+        print(('folders %s\n' %(folders)))
         the_dir = 'ECMWF-Archive'
         #dir = 'test'
         if the_dir not in folders:
@@ -151,7 +151,7 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         
         folders = [ the_dir for (_, _, dir) in folders_info ]
         
-        print('folders %s\n' %(folders))
+        print(('folders %s\n' %(folders)))
         the_dir = 'ECMWF-Archive/ecmwf-simdat'
         #dir = 'test/test-1'
         if the_dir not in folders:
@@ -177,7 +177,7 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         
         existing_folders = gimap.create_gmail_labels(labels_to_create, existing_folders)
         
-        print("folders = %s\n" % (existing_folders))
+        print(("folders = %s\n" % (existing_folders)))
         for label in labels_to_create:
             self.assertTrue( (label.lower() in existing_folders) )   
             
@@ -188,7 +188,7 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         
         existing_folders = gimap.create_gmail_labels(labels_to_create, existing_folders)
         
-        print("folders = %s\n" % (existing_folders))
+        print(("folders = %s\n" % (existing_folders)))
         for label in labels_to_create:
             self.assertTrue( (label.lower() in existing_folders) )   
         
@@ -213,7 +213,7 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         
         print("\nCreate labels.\n")
         
-        labels_to_create = [u'[IMAP]/Trash', u'[IMAP]/Sent']
+        labels_to_create = ['[IMAP]/Trash', '[IMAP]/Sent']
         
         existing_folders = set()
         
@@ -225,24 +225,24 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         #folders = [ directory.lower() for (flags, delim, directory) in gimap.server.list_folders() ]
         folders = [ directory.lower() for directory in existing_folders ]
         
-        print("folders = %s\n" % (folders))
+        print(("folders = %s\n" % (folders)))
         for label in labels_to_create:
             self.assertTrue( (label.lower() in folders) )   
             
         # second creation
-        labels_to_create = [u'[RETEST]', u'[RETEST]/test', u'[RETEST]/Trash', u'[IMAP]/Trash', u'[IMAP]/Draft', u'[IMAP]/Sent', u'[IMAP]']
+        labels_to_create = ['[RETEST]', '[RETEST]/test', '[RETEST]/Trash', '[IMAP]/Trash', '[IMAP]/Draft', '[IMAP]/Sent', '[IMAP]']
         
         existing_folders = gimap.create_gmail_labels(labels_to_create, existing_folders)
         
         folders = [ directory.lower() for directory in existing_folders ]
         
-        print("folders = %s" % (folders))
+        print(("folders = %s" % (folders)))
         for label in labels_to_create:
             self.assertTrue( (label.lower() in folders) )  
             
         #it isn't possible to delete the [IMAP]/Sent, [IMAP]/Draft [IMAP]/Trash labels
         # I give up and do not delete them in the test
-        labels_to_delete = [u'[RETEST]', u'[RETEST]/test', u'[RETEST]/Trash'] 
+        labels_to_delete = ['[RETEST]', '[RETEST]/test', '[RETEST]/Trash'] 
         
         print("Delete labels\n")
         
@@ -268,7 +268,7 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         criteria = ['Before 1-Jan-2011']
         ids = gimap.search(criteria)
         
-        self.assertEquals(len(ids), 33577)
+        self.assertEqual(len(ids), 33577)
         
     def ztest_retrieve_gmail_ids(self):
         """
@@ -285,7 +285,7 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         
         res = gimap.fetch(ids, [gimap.GMAIL_ID])
         
-        self.assertEquals(res, {27362: {'X-GM-MSGID': 1147537963432096749L, 'SEQ': 14535}, 27363: {'X-GM-MSGID': 1147537994018957026L, 'SEQ': 14536}})
+        self.assertEqual(res, {27362: {'X-GM-MSGID': 1147537963432096749, 'SEQ': 14535}, 27363: {'X-GM-MSGID': 1147537994018957026, 'SEQ': 14536}})
         
     def ztest_retrieve_all_params(self):
         """
@@ -300,13 +300,13 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         #criteria = ['ALL']
         ids = gimap.search(criteria)
         
-        self.assertEquals(len(ids), 2)
+        self.assertEqual(len(ids), 2)
         
         res = gimap.fetch(ids[0], [gimap.GMAIL_ID, gimap.EMAIL_BODY, gimap.GMAIL_THREAD_ID, gimap.GMAIL_LABELS])
         
-        self.assertEquals(res[ids[0]][gimap.GMAIL_ID], 1147537963432096749L)
+        self.assertEqual(res[ids[0]][gimap.GMAIL_ID], 1147537963432096749)
         
-        self.assertEquals(res[ids[0]][gimap.EMAIL_BODY], \
+        self.assertEqual(res[ids[0]][gimap.EMAIL_BODY], \
                           'Message-ID: <6999505.1094377483218.JavaMail.wwwadm@chewbacca.ecmwf.int>\r\nDate: Sun, 5 Sep 2004 09:44:43 +0000 (GMT)\r\nFrom: Guillaume.Aubert@ecmwf.int\r\nReply-To: Guillaume.Aubert@ecmwf.int\r\nTo: aubert_guillaume@yahoo.fr\r\nSubject: Fwd: [Flickr] Guillaume Aubert wants you to see their photos\r\nMime-Version: 1.0\r\nContent-Type: text/plain; charset=us-ascii\r\nContent-Transfer-Encoding: 7bit\r\nX-Mailer: jwma\r\nStatus: RO\r\nX-Status: \r\nX-Keywords:                 \r\nX-UID: 1\r\n\r\n\r\n') #pylint:disable-msg=C0301
         
     def ztest_gmvault_retrieve_email_store_and_read(self): #pylint:disable-msg=C0103
@@ -333,15 +333,15 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         
         metadata, data = gstorer.unbury_email(gm_id)
         
-        self.assertEquals(res[the_id][gimap.GMAIL_ID], metadata['gm_id'])
-        self.assertEquals(res[the_id][gimap.EMAIL_BODY], data)
-        self.assertEquals(res[the_id][gimap.GMAIL_THREAD_ID], metadata['thread_ids'])
+        self.assertEqual(res[the_id][gimap.GMAIL_ID], metadata['gm_id'])
+        self.assertEqual(res[the_id][gimap.EMAIL_BODY], data)
+        self.assertEqual(res[the_id][gimap.GMAIL_THREAD_ID], metadata['thread_ids'])
         
         labels = []
         for label in res[the_id][gimap.GMAIL_LABELS]:
             labels.append(label)
             
-        self.assertEquals(labels, metadata['labels'])
+        self.assertEqual(labels, metadata['labels'])
     
     def ztest_gmvault_compress_retrieve_email_store_and_read(self): #pylint:disable-msg=C0103
         """
@@ -370,15 +370,15 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         
         metadata, data = gstorer.unbury_email(gm_id)
         
-        self.assertEquals(res[the_id][gimap.GMAIL_ID], metadata['gm_id'])
-        self.assertEquals(res[the_id][gimap.EMAIL_BODY], data)
-        self.assertEquals(res[the_id][gimap.GMAIL_THREAD_ID], metadata['thread_ids'])
+        self.assertEqual(res[the_id][gimap.GMAIL_ID], metadata['gm_id'])
+        self.assertEqual(res[the_id][gimap.EMAIL_BODY], data)
+        self.assertEqual(res[the_id][gimap.GMAIL_THREAD_ID], metadata['thread_ids'])
         
         labels = []
         for label in res[the_id][gimap.GMAIL_LABELS]:
             labels.append(label)
             
-        self.assertEquals(labels, metadata['labels'])
+        self.assertEqual(labels, metadata['labels'])
     
     def ztest_gmvault_retrieve_multiple_emails_store_and_read(self): #pylint:disable-msg=C0103
         """
@@ -398,25 +398,25 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         #get 30 emails
         for index in range(9, 40):
         
-            print("retrieve email index %d\n" % (index))
+            print(("retrieve email index %d\n" % (index)))
             the_id = ids[index]
             
             res          = gimap.fetch(the_id, gimap.GET_ALL_INFO)
             
             gm_id = gstorer.bury_email(res[the_id])
             
-            print("restore email index %d\n" % (index))
+            print(("restore email index %d\n" % (index)))
             metadata, data = gstorer.unbury_email(gm_id)
             
-            self.assertEquals(res[the_id][gimap.GMAIL_ID], metadata['gm_id'])
-            self.assertEquals(res[the_id][gimap.EMAIL_BODY], data)
-            self.assertEquals(res[the_id][gimap.GMAIL_THREAD_ID], metadata['thread_ids'])
+            self.assertEqual(res[the_id][gimap.GMAIL_ID], metadata['gm_id'])
+            self.assertEqual(res[the_id][gimap.EMAIL_BODY], data)
+            self.assertEqual(res[the_id][gimap.GMAIL_THREAD_ID], metadata['thread_ids'])
             
             labels = []
             for label in res[the_id][gimap.GMAIL_LABELS]:
                 labels.append(label)
                 
-            self.assertEquals(labels, metadata['labels'])
+            self.assertEqual(labels, metadata['labels'])
         
     def ztest_gmvault_store_gzip_email_and_read(self): #pylint:disable-msg=C0103
         """
@@ -437,25 +437,25 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         #get 30 emails
         for index in range(9, 20):
         
-            print("retrieve email index %d\n" % (index))
+            print(("retrieve email index %d\n" % (index)))
             the_id = ids[index]
             
             res          = gimap.fetch(the_id, gimap.GET_ALL_INFO)
             
             gm_id = gstorer.bury_email(res[the_id], compress = True)
             
-            print("restore email index %d\n" % (index))
+            print(("restore email index %d\n" % (index)))
             metadata, data = gstorer.unbury_email(gm_id)
             
-            self.assertEquals(res[the_id][gimap.GMAIL_ID], metadata['gm_id'])
-            self.assertEquals(res[the_id][gimap.EMAIL_BODY], data)
-            self.assertEquals(res[the_id][gimap.GMAIL_THREAD_ID], metadata['thread_ids'])
+            self.assertEqual(res[the_id][gimap.GMAIL_ID], metadata['gm_id'])
+            self.assertEqual(res[the_id][gimap.EMAIL_BODY], data)
+            self.assertEqual(res[the_id][gimap.GMAIL_THREAD_ID], metadata['thread_ids'])
             
             labels = []
             for label in res[the_id][gimap.GMAIL_LABELS]:
                 labels.append(label)
                 
-            self.assertEquals(labels, metadata['labels'])
+            self.assertEqual(labels, metadata['labels'])
             
     def ztest_restore_one_email(self):
         """
@@ -490,12 +490,12 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         dest_email = gdestination.fetch(dest_id, gsource.GET_ALL_INFO)
         
         # do the checkings
-        self.assertEquals(dest_email[dest_id][gsource.IMAP_FLAGS], source_email[the_id][gsource.IMAP_FLAGS])
-        self.assertEquals(dest_email[dest_id][gsource.EMAIL_BODY], source_email[the_id][gsource.EMAIL_BODY])
-        self.assertEquals(dest_email[dest_id][gsource.GMAIL_LABELS], source_email[the_id][gsource.GMAIL_LABELS])
+        self.assertEqual(dest_email[dest_id][gsource.IMAP_FLAGS], source_email[the_id][gsource.IMAP_FLAGS])
+        self.assertEqual(dest_email[dest_id][gsource.EMAIL_BODY], source_email[the_id][gsource.EMAIL_BODY])
+        self.assertEqual(dest_email[dest_id][gsource.GMAIL_LABELS], source_email[the_id][gsource.GMAIL_LABELS])
             
         #should be ok to be checked
-        self.assertEquals(dest_email[dest_id][gsource.IMAP_INTERNALDATE], source_email[the_id][gsource.IMAP_INTERNALDATE])
+        self.assertEqual(dest_email[dest_id][gsource.IMAP_INTERNALDATE], source_email[the_id][gsource.IMAP_INTERNALDATE])
         
     def ztest_restore_10_emails(self):
         """
@@ -515,7 +515,7 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         #get 30 emails
         for index in range(9, 20):
             
-            print("email nb %d\n" % (index))
+            print(("email nb %d\n" % (index)))
         
             the_id = ids[index]
              
@@ -537,8 +537,8 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
             
             #check that it has the same
             # do the checkings
-            self.assertEquals(dest_email[dest_id][gsource.IMAP_FLAGS], source_email[the_id][gsource.IMAP_FLAGS])
-            self.assertEquals(dest_email[dest_id][gsource.EMAIL_BODY], source_email[the_id][gsource.EMAIL_BODY])
+            self.assertEqual(dest_email[dest_id][gsource.IMAP_FLAGS], source_email[the_id][gsource.IMAP_FLAGS])
+            self.assertEqual(dest_email[dest_id][gsource.EMAIL_BODY], source_email[the_id][gsource.EMAIL_BODY])
             
             dest_labels = []
             for elem in dest_email[dest_id][gsource.GMAIL_LABELS]:
@@ -550,7 +550,7 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
                 if not elem == '\\Important':
                     src_labels.append(elem)
             
-            self.assertEquals(dest_labels, src_labels)
+            self.assertEqual(dest_labels, src_labels)
         
     def ztest_few_days_syncer(self):
         """
@@ -566,15 +566,15 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         
         metadata = gmvault.GMVaulter.check_email_on_disk(gstorer, 1384313269332005293)
         
-        self.assertEquals(metadata['gm_id'], 1384313269332005293)
+        self.assertEqual(metadata['gm_id'], 1384313269332005293)
         
         metadata = gmvault.GMVaulter.check_email_on_disk(gstorer, 1384403887202624608)
         
-        self.assertEquals(metadata['gm_id'], 1384403887202624608)
+        self.assertEqual(metadata['gm_id'], 1384403887202624608)
             
         metadata = gmvault.GMVaulter.check_email_on_disk(gstorer, 1384486067720566818)
         
-        self.assertEquals(metadata['gm_id'], 1384486067720566818)
+        self.assertEqual(metadata['gm_id'], 1384486067720566818)
         
     def ztest_few_days_syncer_with_deletion(self): #pylint:disable-msg=C0103
         """
@@ -626,7 +626,7 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         
         metadata = gmvault.GMVaulter.check_email_on_disk(gstorer, 1384313269332005293)
         
-        self.assertEquals(metadata['gm_id'], 1384313269332005293)
+        self.assertEqual(metadata['gm_id'], 1384313269332005293)
         
         email_meta, email_data = gstorer.unbury_email(1384313269332005293)
         
@@ -681,7 +681,7 @@ class TestGMVault(unittest.TestCase): #pylint:disable-msg=R0904
         credential = { 'type' : 'passwd', 'value': self.passwd}
         syncer = gmvault.GMVaulter(db_dir, 'imap.gmail.com', 993, self.login, credential, 'verySecRetKeY')
         
-        syncer._create_update_sync([142221L], compress = True)
+        syncer._create_update_sync([142221], compress = True)
         
     def test_check_flags(self):
         """

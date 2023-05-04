@@ -44,12 +44,12 @@ class TestPerf(unittest.TestCase): #pylint:disable-msg=R0904
         data_file = '%d.eml'
         meta_file = '%d.meta'
         
-        for nb in xrange(0, nb_dirs):
+        for nb in range(0, nb_dirs):
             #make dir
             the_dir = '%s/%s' % (working_dir, dirname % nb)
             gmvault_utils.makedirs(the_dir)
 
-            for file_id in xrange(0,nb_files_per_dir):
+            for file_id in range(0,nb_files_per_dir):
                 #create data file
                 with open('%s/%s_%s' % (the_dir, dirname % nb,
                                         data_file % file_id), 'w') as f:
@@ -94,8 +94,8 @@ class TestPerf(unittest.TestCase): #pylint:disable-msg=R0904
             gmail_ids[os.path.splitext(fname)[0]] = os.path.basename(directory)
         t2 = datetime.datetime.now()
         
-        print("\nnb of files = %s" % (len(gmail_ids.keys())))
-        print("\nTime to read all meta files : %s\n" % (t2-t1))
+        print(("\nnb of files = %s" % (len(list(gmail_ids.keys())))))
+        print(("\nTime to read all meta files : %s\n" % (t2-t1)))
         
 
 def tests():

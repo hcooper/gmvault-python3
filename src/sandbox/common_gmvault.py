@@ -180,7 +180,7 @@ class IMAPBatchFetcher(object):
     def __iter__(self):
         return self     
     
-    def next(self):
+    def __next__(self):
         """
             Return the next batch of elements
         """
@@ -834,7 +834,7 @@ class GMVaulter(object):
          
         #calculate the list elements to delete
         #query nb_items items in one query to minimise number of imap queries
-        for group_imap_id in itertools.izip_longest(fillvalue=None, *[iter(imap_ids)]*nb_items):
+        for group_imap_id in itertools.zip_longest(fillvalue=None, *[iter(imap_ids)]*nb_items):
             
             # if None in list remove it
             if None in group_imap_id: 
@@ -1008,7 +1008,7 @@ class GMVaulter(object):
         
         last_id_index = -1
         try:
-            keys = db_gmail_ids_info.keys()
+            keys = list(db_gmail_ids_info.keys())
             last_id_index = keys.index(last_id)
             LOG.critical("Restart from gmail id %s." % (last_id))
         except ValueError:
@@ -1017,7 +1017,7 @@ class GMVaulter(object):
         
         new_gmail_ids_info = collections_utils.OrderedDict()
         if last_id_index != -1:
-            for key in db_gmail_ids_info.keys()[last_id_index+1:]:
+            for key in list(db_gmail_ids_info.keys())[last_id_index+1:]:
                 new_gmail_ids_info[key] =  db_gmail_ids_info[key]
         else:
             new_gmail_ids_info = db_gmail_ids_info    
@@ -1070,7 +1070,7 @@ class GMVaulter(object):
         #get gmail_ids from db
         db_gmail_ids_info = self.gstorer.get_all_chats_gmail_ids()
         
-        LOG.critical("Total number of chats to restore %s." % (len(db_gmail_ids_info.keys())))
+        LOG.critical("Total number of chats to restore %s." % (len(list(db_gmail_ids_info.keys()))))
         
         if restart:
             db_gmail_ids_info = self.get_gmails_ids_left_to_restore(self.OP_CHAT_RESTORE, db_gmail_ids_info)
@@ -1094,11 +1094,11 @@ class GMVaulter(object):
         
         nb_items = gmvault_utils.get_conf_defaults().get_int("General", "nb_messages_per_restore_batch", 100) 
         
-        for group_imap_ids in itertools.izip_longest(fillvalue=None, *[iter(db_gmail_ids_info)]*nb_items): 
+        for group_imap_ids in itertools.zip_longest(fillvalue=None, *[iter(db_gmail_ids_info)]*nb_items): 
 
             last_id = group_imap_ids[-1] #will be used to save the last id
             #remove all None elements from group_imap_ids
-            group_imap_ids = itertools.ifilter(lambda x: x != None, group_imap_ids)
+            group_imap_ids = filter(lambda x: x != None, group_imap_ids)
            
             labels_to_create    = set() #create label set
             labels_to_create.update(extra_labels) # add extra labels to applied to all emails
@@ -1141,7 +1141,7 @@ class GMVaulter(object):
             try:
                 LOG.debug("Changing directory. Going into ALLMAIL")
                 self.src.select_folder('ALLMAIL') #go to ALL MAIL to make STORE usable
-                for label in labels_to_apply.keys():
+                for label in list(labels_to_apply.keys()):
                     self.src.apply_labels_to(labels_to_apply[label], [label]) 
             except Exception as err:
                 LOG.error("Problem when applying labels %s to the following ids: %s" %(label, labels_to_apply[label]), err)
@@ -1190,7 +1190,7 @@ class GMVaulter(object):
         #get gmail_ids from db
         db_gmail_ids_info = self.gstorer.get_all_existing_gmail_ids(pivot_dir)
         
-        LOG.critical("Total number of elements to restore %s." % (len(db_gmail_ids_info.keys())))
+        LOG.critical("Total number of elements to restore %s." % (len(list(db_gmail_ids_info.keys()))))
         
         if restart:
             db_gmail_ids_info = self.get_gmails_ids_left_to_restore(self.OP_EMAIL_RESTORE, db_gmail_ids_info)
@@ -1215,11 +1215,11 @@ class GMVaulter(object):
         
         nb_items = gmvault_utils.get_conf_defaults().get_int("General", "nb_messages_per_restore_batch", 80) 
         
-        for group_imap_ids in itertools.izip_longest(fillvalue=None, *[iter(db_gmail_ids_info)]*nb_items): 
+        for group_imap_ids in itertools.zip_longest(fillvalue=None, *[iter(db_gmail_ids_info)]*nb_items): 
             
             last_id = group_imap_ids[-1] #will be used to save the last id
             #remove all None elements from group_imap_ids
-            group_imap_ids = itertools.ifilter(lambda x: x != None, group_imap_ids)
+            group_imap_ids = filter(lambda x: x != None, group_imap_ids)
            
             labels_to_create    = set() #create label set
             labels_to_create.update(extra_labels) # add extra labels to applied to all emails
@@ -1267,7 +1267,7 @@ class GMVaulter(object):
                 the_timer.start()
                 self.src.select_folder('ALLMAIL') #go to ALL MAIL to make STORE usable
                 LOG.debug("Changed dir. Operation time = %s ms" % (the_timer.elapsed_ms()))
-                for label in labels_to_apply.keys():
+                for label in list(labels_to_apply.keys()):
                     self.src.apply_labels_to(labels_to_apply[label], [label]) 
             except Exception as err:
                 LOG.error("Problem when applying labels %s to the following ids: %s" %(label, labels_to_apply[label]), err)

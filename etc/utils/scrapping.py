@@ -41,7 +41,7 @@ def get_from_bitbucket():
     #body_tag = soup.body
     all_tables = soup.findAll('table')
 
-    table = soup.find(lambda tag: tag.name=='table' and tag.has_key('id') and tag['id']=="uploaded-files")
+    table = soup.find(lambda tag: tag.name=='table' and 'id' in tag and tag['id']=="uploaded-files")
 
     rows = table.findAll(lambda tag: tag.name=='tr')
 
@@ -76,7 +76,7 @@ def get_from_pypi(url):
  
     res = {}
 
-    print("Get info from pypi (url= %s)\n" % (url))
+    print(("Get info from pypi (url= %s)\n" % (url)))
 
     br = mechanize.Browser()
     br.open(url)
@@ -152,7 +152,7 @@ def get_stats(return_type):
     v181_total  = 0 
     pypi_total  = 0
     src_total   = 0
-    for key in res.keys():
+    for key in list(res.keys()):
         #print("key= %s: (%s)\n" %(key, res[key]))
         if key.endswith(".exe"):
            win_total += res[key] 
@@ -204,6 +204,6 @@ def get_stats(return_type):
 
 if __name__ == "__main__":
 
-    print(get_stats("JSON"))
+    print((get_stats("JSON")))
 
 

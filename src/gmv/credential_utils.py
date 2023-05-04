@@ -23,8 +23,8 @@
 import webbrowser
 import json
 import base64
-import urllib #for urlencode
-import urllib2
+import urllib.request, urllib.parse, urllib.error #for urlencode
+import urllib.request, urllib.error, urllib.parse
 
 import os
 import getpass
@@ -74,7 +74,7 @@ class CredentialHelper(object):
         else:
             secret = gmvault_utils.make_password()
 
-            fdesc = os.open(a_filepath, os.O_CREAT|os.O_WRONLY, 0600)
+            fdesc = os.open(a_filepath, os.O_CREAT|os.O_WRONLY, 0o600)
             try:
                 the_bytes = os.write(fdesc, secret)
             finally:
@@ -92,7 +92,7 @@ class CredentialHelper(object):
         """
         passwd_file = '%s/%s.passwd' % (gmvault_utils.get_home_dir_path(), email)
     
-        fdesc = os.open(passwd_file, os.O_CREAT|os.O_WRONLY, 0600)
+        fdesc = os.open(passwd_file, os.O_CREAT|os.O_WRONLY, 0o600)
         
         cipher       = blowfish.Blowfish(cls.get_secret_key(cls.SECRET_FILEPATH % (gmvault_utils.get_home_dir_path())))
         cipher.initCTR()
@@ -261,7 +261,7 @@ class CredentialHelper(object):
       request_url = '%s/%s' % (account_base_url, 'o/oauth2/token')
 
       try:
-        response = urllib2.urlopen(request_url, urllib.urlencode(params)).read()
+        response = urllib.request.urlopen(request_url, urllib.parse.urlencode(params)).read()
       except Exception as err: #pylint: disable-msg=W0703
         LOG.critical("Error: Problems when trying to connect to Google oauth2 endpoint: %s.\n" % (request_url))
         raise err
@@ -300,7 +300,7 @@ class CredentialHelper(object):
         request_url = '%s/%s' % (account_base_url, 'o/oauth2/token')
 
         try:
-            response = urllib2.urlopen(request_url, urllib.urlencode(params)).read()
+            response = urllib.request.urlopen(request_url, urllib.parse.urlencode(params)).read()
         except Exception as err: #pylint: disable-msg=W0703
             LOG.critical("Error: Problems when trying to connect to Google oauth2 endpoint: %s." % (request_url))
             raise err
@@ -317,7 +317,7 @@ class CredentialHelper(object):
         permission_url = generate_permission_url()
 
         #message to indicate that a browser will be opened
-        raw_input('gmvault will now open a web browser page in order for you to grant gmvault access to your Gmail.\n'\
+        input('gmvault will now open a web browser page in order for you to grant gmvault access to your Gmail.\n'\
                   'Please make sure you\'re logged into the correct Gmail account (%s) before granting access.\n'\
                   'Press ENTER to open the browser.' % (email))
 
@@ -331,11 +331,11 @@ class CredentialHelper(object):
                 LOG.critical(gmvault_utils.get_exception_traceback())
                 LOG.critical("=== End of Exception traceback ===\n")
 
-            verification_code = raw_input("You should now see the web page on your browser now.\n"\
+            verification_code = input("You should now see the web page on your browser now.\n"\
                       "If you don\'t, you can manually open:\n\n%s\n\nOnce you've granted"\
                       " gmvault access, enter the verification code and press enter:\n" % (permission_url))
         else:
-            verification_code = raw_input('Please log in and/or grant access via your browser at %s '
+            verification_code = input('Please log in and/or grant access via your browser at %s '
                       'then enter the verification code and press enter:' % (permission_url))
 
         #request access and refresh token with the obtained verification code

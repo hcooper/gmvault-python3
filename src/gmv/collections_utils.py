@@ -72,7 +72,7 @@ class OrderedDict(dict, collections.MutableMapping):
     items      = collections.MutableMapping.items
 
     def __repr__(self):
-        pairs = ', '.join(map('%r: %r'.__mod__, self.items()))
+        pairs = ', '.join(map('%r: %r'.__mod__, list(self.items())))
         return '%s({%s})' % (self.__class__.__name__, pairs)
 
     def copy(self):
@@ -115,7 +115,7 @@ class Map(object):
     
     def keys(self):
         '''returns list of keys'''
-        return self._dict.keys()
+        return list(self._dict.keys())
     
     def dict(self):
         """ Allows access to internal dictionary, if necessary. Caution: multimaps 

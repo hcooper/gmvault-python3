@@ -20,16 +20,16 @@ def test_oauth2_with_google():
     # Step 1: get user code and verification URL
     # https://developers.google.com/accounts/docs/OAuth2ForDevices#obtainingacode
     flow_info = flow.step1_get_device_and_user_codes()
-    print "Enter the following code at %s: %s" % (flow_info.verification_url,
-                                                  flow_info.user_code)
-    print "Then press Enter."
-    input()
+    print("Enter the following code at %s: %s" % (flow_info.verification_url,
+                                                  flow_info.user_code))
+    print("Then press Enter.")
+    eval(input())
 
     # Step 2: get credentials
     # https://developers.google.com/accounts/docs/OAuth2ForDevices#obtainingatoken
     credentials = flow.step2_exchange(device_flow_info=flow_info)
-    print "Access token:", credentials.access_token
-    print "Refresh token:", credentials.refresh_token
+    print("Access token:", credentials.access_token)
+    print("Refresh token:", credentials.refresh_token)
 
 #Get IMAP Service
 

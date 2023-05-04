@@ -21,14 +21,14 @@
 # Gmvault constants
 
 GMAIL_UNLOCAL_CHATS = [
-                     u'[Gmail]/Chats', u'[Google Mail]/Chats', #en, es, ger, portuguese
-                     u'[Gmail]/Chat', u'[Google Mail]/Chat', #it
-                     u'[Google Mail]/Tous les chats', u'[Gmail]/Tous les chats', # french
-                     u'[Gmail]/Чаты', u'[Google Mail]/Чаты', # russian
-                     u'[Gmail]/チャット', u'[Google Mail]/チャット', # japanese
-                     u'[Google Mail]/Czat', u'[Gmail]/Czat', # polish
-                     u'[Google Mail]/聊天', u'[Gmail]/聊天' , # chinese
-                     u'[Google Mail]/Bate-papos', u'[Gmail]/Bate-papos', #portuguese brazil
+                     '[Gmail]/Chats', '[Google Mail]/Chats', #en, es, ger, portuguese
+                     '[Gmail]/Chat', '[Google Mail]/Chat', #it
+                     '[Google Mail]/Tous les chats', '[Gmail]/Tous les chats', # french
+                     '[Gmail]/Чаты', '[Google Mail]/Чаты', # russian
+                     '[Gmail]/チャット', '[Google Mail]/チャット', # japanese
+                     '[Google Mail]/Czat', '[Gmail]/Czat', # polish
+                     '[Google Mail]/聊天', '[Gmail]/聊天' , # chinese
+                     '[Google Mail]/Bate-papos', '[Gmail]/Bate-papos', #portuguese brazil
                     ]   # unlocalised Chats names
 
 #The default conf file

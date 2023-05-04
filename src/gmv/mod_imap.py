@@ -24,7 +24,7 @@ import datetime
 import re
 import socket
 import ssl
-import cStringIO
+import io
 import os
 
 import imaplib  #for the exception
@@ -154,13 +154,13 @@ class IMAP4COMPSSL(imaplib.IMAP4_SSL): #pylint:disable=R0904
             Call _intern_read that takes care of the compression
         """
         
-        chunks = cStringIO.StringIO() #use cStringIO.cStringIO to avoir too much fragmentation
+        chunks = io.StringIO() #use cStringIO.cStringIO to avoir too much fragmentation
         read = 0
         while read < size:
             try:
                 data = self._intern_read(min(size-read, 16384)) #never ask more than 16384 because imaplib can do it
             except ssl.SSLError as err:
-                print("************* SSLError received %s" % (err)) 
+                print(("************* SSLError received %s" % (err))) 
                 raise self.abort('Gmvault ssl socket error: EOF. Connection lost, reconnect.')
             read += len(data)
             chunks.write(data)
@@ -173,7 +173,7 @@ class IMAP4COMPSSL(imaplib.IMAP4_SSL): #pylint:disable=R0904
             Call _intern_read that takes care of the compression
         """
         
-        chunks = cStringIO.StringIO() #use cStringIO.cStringIO to avoir too much fragmentation
+        chunks = io.StringIO() #use cStringIO.cStringIO to avoir too much fragmentation
         read = 0
         while read < size:
             data = self._intern_read(min(size-read, 16384)) #never ask more than 16384 because imaplib can do it
@@ -202,7 +202,7 @@ class IMAP4COMPSSL(imaplib.IMAP4_SSL): #pylint:disable=R0904
         
     def readline(self):
         """Read line from remote."""
-        line = cStringIO.StringIO() #use cStringIO to avoid memory fragmentation
+        line = io.StringIO() #use cStringIO to avoid memory fragmentation
         while 1:
             #make use of read that takes care of the compression
             #it could be simplified without compression
@@ -296,7 +296,7 @@ class MonkeyIMAPClient(imapclient.IMAPClient): #pylint:disable=R0903,R0904
         if data == [None]: # no untagged responses...
             return [ ]
 
-        return [ long(i) for i in data[0].split() ]
+        return [ int(i) for i in data[0].split() ]
 
     def append(self, folder, msg, flags=(), msg_time=None):
         """Append a message to *folder*.

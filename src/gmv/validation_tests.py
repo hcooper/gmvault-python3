@@ -90,7 +90,7 @@ class TestGMVaultValidation(unittest.TestCase): #pylint:disable=R0904
             
             #compare metadata
             for key in disk_metadata:
-                self.assertEquals(disk_metadata[key], online_metadata[key])
+                self.assertEqual(disk_metadata[key], online_metadata[key])
             
 
 def tests():

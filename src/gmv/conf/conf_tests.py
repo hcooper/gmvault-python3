@@ -245,7 +245,7 @@ class TestConf(unittest.TestCase): #pylint: disable=R0904
         
         the_list = self.conf.getlist('GroupTestValueStruct', 'unicode_list')
         
-        self.assertEqual(the_list, [ u'[Gmail]/Чаты', 'z' , 1 ])
+        self.assertEqual(the_list, [ '[Gmail]/Чаты', 'z' , 1 ])
     
     def test_value_as_dict(self):
         """Dict as Value """
@@ -266,7 +266,7 @@ class TestConf(unittest.TestCase): #pylint: disable=R0904
         try:
             self.conf.get_dict('GroupTestValueStruct', 'dict_error')
         except Exception as err:
-            self.assertEquals(err.message, "Expression \"{1:2,'v b': a\" cannot be converted as a dict.")
+            self.assertEqual(err.message, "Expression \"{1:2,'v b': a\" cannot be converted as a dict.")
             return
         
         self.fail('Should never reach that point')
@@ -276,9 +276,9 @@ class TestConf(unittest.TestCase): #pylint: disable=R0904
         
         try:
             the_list = self.conf.get_list('GroupTestValueStruct', 'list_error')
-            print('the_list = %s\n' % (the_list))
+            print(('the_list = %s\n' % (the_list)))
         except Exception as err:
-            self.assertEquals(err.message, 'Unsupported token (type: @, value : OP) (line=1,col=3).')
+            self.assertEqual(err.message, 'Unsupported token (type: @, value : OP) (line=1,col=3).')
             return
          
         self.fail('Should never reach that point')

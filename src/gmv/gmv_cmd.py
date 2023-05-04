@@ -821,8 +821,8 @@ def sigusr1_handler(signum, frame): #pylint:disable=W0613
 
     filename = './gmvault.traceback.txt'
 
-    print("GMVAULT: Received SIGUSR1 -- Printing stack trace in %s..." %
-          os.path.abspath(filename))
+    print(("GMVAULT: Received SIGUSR1 -- Printing stack trace in %s..." %
+          os.path.abspath(filename)))
 
     with open(filename, 'a') as f:
         traceback.print_stack(file=f)

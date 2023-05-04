@@ -25,7 +25,7 @@ import itertools
 import fnmatch
 import shutil
 import codecs
-import StringIO
+import io
 
 import gmv.blowfish as blowfish
 import gmv.log_utils as log_utils
@@ -263,7 +263,7 @@ class GmailStorer(object): #pylint:disable=R0902,R0904,R0914
             encod    = "not found"
             try:
                 encod  = gmvault_utils.guess_encoding(tempo, use_encoding_list = False)
-                u_tempo = unicode(tempo, encoding = encod)
+                u_tempo = str(tempo, encoding = encod)
             except gmvault_utils.GuessEncoding as enc_err:
                   #it is already in unicode so ignore encoding
                   u_tempo = tempo
@@ -271,7 +271,7 @@ class GmailStorer(object): #pylint:disable=R0902,R0904,R0914
                   LOG.critical(e)
                   LOG.critical("Warning: Guessed encoding = (%s). Ignore those characters" % (encod))
                   #try utf-8
-                  u_tempo = unicode(tempo, encoding="utf-8", errors='replace')
+                  u_tempo = str(tempo, encoding="utf-8", errors='replace')
 
             if u_tempo:
                 subject = u_tempo.encode('utf-8')
@@ -303,12 +303,12 @@ class GmailStorer(object): #pylint:disable=R0902,R0904,R0914
             #get all ids
             for filepath in the_iter:
                 directory, fname = os.path.split(filepath)
-                gmail_ids[long(os.path.splitext(fname)[0])] = os.path.basename(directory)
+                gmail_ids[int(os.path.splitext(fname)[0])] = os.path.basename(directory)
 
             #sort by key 
             #used own orderedDict to be compliant with version 2.5
             gmail_ids = collections_utils.OrderedDict(
-                sorted(gmail_ids.items(), key=lambda t: t[0]))
+                sorted(list(gmail_ids.items()), key=lambda t: t[0]))
 
         return gmail_ids
 
@@ -343,11 +343,11 @@ class GmailStorer(object): #pylint:disable=R0902,R0904,R0914
         #get all ids
         for filepath in the_iter:
             directory, fname = os.path.split(filepath)
-            gmail_ids[long(os.path.splitext(fname)[0])] = os.path.basename(directory)
+            gmail_ids[int(os.path.splitext(fname)[0])] = os.path.basename(directory)
 
         #sort by key 
         #used own orderedDict to be compliant with version 2.5
-        gmail_ids = collections_utils.OrderedDict(sorted(gmail_ids.items(),
+        gmail_ids = collections_utils.OrderedDict(sorted(list(gmail_ids.items()),
                                                          key=lambda t: t[0]))
 
         return gmail_ids
@@ -384,10 +384,10 @@ class GmailStorer(object): #pylint:disable=R0902,R0904,R0914
             # come from imap_lib when label is a number
             labels = []
             for label in email_info[imap_utils.GIMAPFetcher.GMAIL_LABELS]:
-                if isinstance(label, (int, long, float, complex)):
+                if isinstance(label, (int, float, complex)):
                     label = str(label)
 
-                labels.append(unicode(gmvault_utils.remove_consecutive_spaces_and_strip(label)))
+                labels.append(str(gmvault_utils.remove_consecutive_spaces_and_strip(label)))
 
             labels.extend(extra_labels) #add extra labels
 
@@ -655,9 +655,9 @@ class GmailStorer(object): #pylint:disable=R0902,R0904,R0914
         new_labels = []
 
         for label in metadata[self.LABELS_K]:
-            if isinstance(label, (int, long, float, complex)):
+            if isinstance(label, (int, float, complex)):
                 label = str(label)
-            new_labels.append(unicode(label))
+            new_labels.append(str(label))
  
         metadata[self.LABELS_K] = new_labels
 

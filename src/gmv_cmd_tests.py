@@ -94,16 +94,16 @@ class TestGMVCMD(unittest.TestCase): #pylint:disable-msg=R0904
         args = gmvlt.parse_args()
         
         #check args
-        self.assertEquals(args['command'],  'sync')
-        self.assertEquals(args['type'],     'full')
-        self.assertEquals(args['email'],    self.login)
-        self.assertEquals(args['passwd'],   'not_seen')
-        self.assertEquals(args['oauth'],    'empty')
-        self.assertEquals(args['request'], {'req': 'ALL', 'type': 'imap'})
-        self.assertEquals(args['host'],'imap.gmail.com')
-        self.assertEquals(args['port'], 993)
-        self.assertEquals(args['db-cleaning'], True)
-        self.assertEquals(args['db-dir'],'%s/gmvault-db' % (os.environ['HOME']))
+        self.assertEqual(args['command'],  'sync')
+        self.assertEqual(args['type'],     'full')
+        self.assertEqual(args['email'],    self.login)
+        self.assertEqual(args['passwd'],   'not_seen')
+        self.assertEqual(args['oauth'],    'empty')
+        self.assertEqual(args['request'], {'req': 'ALL', 'type': 'imap'})
+        self.assertEqual(args['host'],'imap.gmail.com')
+        self.assertEqual(args['port'], 993)
+        self.assertEqual(args['db-cleaning'], True)
+        self.assertEqual(args['db-dir'],'%s/gmvault-db' % (os.environ['HOME']))
             
         
         # test 2: do imap search
@@ -116,16 +116,16 @@ class TestGMVCMD(unittest.TestCase): #pylint:disable-msg=R0904
         args = gmvlt.parse_args()
         
         #check args
-        self.assertEquals(args['command'],  'sync')
-        self.assertEquals(args['type'],     'custom')
-        self.assertEquals(args['email'],    self.login)
-        self.assertEquals(args['passwd'],   'not_seen')
-        self.assertEquals(args['oauth'],    'empty')
-        self.assertEquals(args['request'], {'req': 'Since 1-Nov-2011 Before 4-Nov-2011', 'type': 'imap'})
-        self.assertEquals(args['host'],'imap.gmail.com')
-        self.assertEquals(args['port'], 993)
-        self.assertEquals(args['db-cleaning'], True)
-        self.assertEquals(args['db-dir'],'/tmp/new-db-1')
+        self.assertEqual(args['command'],  'sync')
+        self.assertEqual(args['type'],     'custom')
+        self.assertEqual(args['email'],    self.login)
+        self.assertEqual(args['passwd'],   'not_seen')
+        self.assertEqual(args['oauth'],    'empty')
+        self.assertEqual(args['request'], {'req': 'Since 1-Nov-2011 Before 4-Nov-2011', 'type': 'imap'})
+        self.assertEqual(args['host'],'imap.gmail.com')
+        self.assertEqual(args['port'], 993)
+        self.assertEqual(args['db-cleaning'], True)
+        self.assertEqual(args['db-dir'],'/tmp/new-db-1')
         
         # test 2: do gmail search
         sys.argv = ['gmvault.py', 'sync','-t', 'custom',
@@ -138,16 +138,16 @@ class TestGMVCMD(unittest.TestCase): #pylint:disable-msg=R0904
         args = gmvlt.parse_args()
         
         #check args
-        self.assertEquals(args['command'],  'sync')
-        self.assertEquals(args['type'],     'custom')
-        self.assertEquals(args['email'],    self.login)
-        self.assertEquals(args['passwd'],   'not_seen')
-        self.assertEquals(args['oauth'],    'empty')
-        self.assertEquals(args['request'], {'req': 'subject:Chandeleur bis', 'type': 'gmail'})
-        self.assertEquals(args['host'],'imap.gmail.com')
-        self.assertEquals(args['port'], 993)
-        self.assertEquals(args['db-cleaning'], True)
-        self.assertEquals(args['db-dir'],'/tmp/new-db-1')
+        self.assertEqual(args['command'],  'sync')
+        self.assertEqual(args['type'],     'custom')
+        self.assertEqual(args['email'],    self.login)
+        self.assertEqual(args['passwd'],   'not_seen')
+        self.assertEqual(args['oauth'],    'empty')
+        self.assertEqual(args['request'], {'req': 'subject:Chandeleur bis', 'type': 'gmail'})
+        self.assertEqual(args['host'],'imap.gmail.com')
+        self.assertEqual(args['port'], 993)
+        self.assertEqual(args['db-cleaning'], True)
+        self.assertEqual(args['db-dir'],'/tmp/new-db-1')
         
         #test3 emails only
         sys.argv = ['gmvault.py', 'sync','-t', 'custom',
@@ -161,18 +161,18 @@ class TestGMVCMD(unittest.TestCase): #pylint:disable-msg=R0904
         args = gmvlt.parse_args()
         
         #check args
-        self.assertEquals(args['emails_only'], True)
-        self.assertEquals(args['chats_only'], False)
-        self.assertEquals(args['command'],  'sync')
-        self.assertEquals(args['type'],     'custom')
-        self.assertEquals(args['email'],    self.login)
-        self.assertEquals(args['passwd'],   'not_seen')
-        self.assertEquals(args['oauth'],    'empty')
-        self.assertEquals(args['request'], {'req': 'subject:Chandeleur bis', 'type': 'gmail'})
-        self.assertEquals(args['host'],'imap.gmail.com')
-        self.assertEquals(args['port'], 993)
-        self.assertEquals(args['db-cleaning'], True)
-        self.assertEquals(args['db-dir'],'/tmp/new-db-1')
+        self.assertEqual(args['emails_only'], True)
+        self.assertEqual(args['chats_only'], False)
+        self.assertEqual(args['command'],  'sync')
+        self.assertEqual(args['type'],     'custom')
+        self.assertEqual(args['email'],    self.login)
+        self.assertEqual(args['passwd'],   'not_seen')
+        self.assertEqual(args['oauth'],    'empty')
+        self.assertEqual(args['request'], {'req': 'subject:Chandeleur bis', 'type': 'gmail'})
+        self.assertEqual(args['host'],'imap.gmail.com')
+        self.assertEqual(args['port'], 993)
+        self.assertEqual(args['db-cleaning'], True)
+        self.assertEqual(args['db-dir'],'/tmp/new-db-1')
         
         #test chats only
         sys.argv = ['gmvault.py', 'sync','-t', 'custom',
@@ -185,22 +185,22 @@ class TestGMVCMD(unittest.TestCase): #pylint:disable-msg=R0904
         args = gmvlt.parse_args()
         
         #check args
-        self.assertEquals(args['chats_only'], True)
-        self.assertEquals(args['emails_only'], False)
-        self.assertEquals(args['command'],  'sync')
-        self.assertEquals(args['type'],     'custom')
-        self.assertEquals(args['email'],    self.login)
-        self.assertEquals(args['passwd'],   'not_seen')
-        self.assertEquals(args['oauth'],    'empty')
-        self.assertEquals(args['request'], {'req': 'subject:Chandeleur bis', 'type': 'gmail'})
-        self.assertEquals(args['host'],'imap.gmail.com')
-        self.assertEquals(args['port'], 993)
-        self.assertEquals(args['db-cleaning'], True)
-        self.assertEquals(args['db-dir'],'/tmp/new-db-1')
-        self.assertEquals(args['ownership_control'], True)
-        self.assertEquals(args['compression'], True)
-        self.assertEquals(args['debug'], False)
-        self.assertEquals(args['restart'], False)
+        self.assertEqual(args['chats_only'], True)
+        self.assertEqual(args['emails_only'], False)
+        self.assertEqual(args['command'],  'sync')
+        self.assertEqual(args['type'],     'custom')
+        self.assertEqual(args['email'],    self.login)
+        self.assertEqual(args['passwd'],   'not_seen')
+        self.assertEqual(args['oauth'],    'empty')
+        self.assertEqual(args['request'], {'req': 'subject:Chandeleur bis', 'type': 'gmail'})
+        self.assertEqual(args['host'],'imap.gmail.com')
+        self.assertEqual(args['port'], 993)
+        self.assertEqual(args['db-cleaning'], True)
+        self.assertEqual(args['db-dir'],'/tmp/new-db-1')
+        self.assertEqual(args['ownership_control'], True)
+        self.assertEqual(args['compression'], True)
+        self.assertEqual(args['debug'], False)
+        self.assertEqual(args['restart'], False)
  
  
         #test5 chats only
@@ -216,21 +216,21 @@ class TestGMVCMD(unittest.TestCase): #pylint:disable-msg=R0904
         args = gmvlt.parse_args()
         
         #check args
-        self.assertEquals(args['chats_only'], False)
-        self.assertEquals(args['emails_only'], False)
-        self.assertEquals(args['command'],  'sync')
-        self.assertEquals(args['type'],     'custom')
-        self.assertEquals(args['email'],    self.login)
-        self.assertEquals(args['passwd'],   'not_seen')
-        self.assertEquals(args['oauth'],    'empty')
-        self.assertEquals(args['request'], {'req': 'subject:Chandeleur bis', 'type': 'gmail'})
-        self.assertEquals(args['host'],'imap.gmail.com')
-        self.assertEquals(args['port'], 993)
-        self.assertEquals(args['db-cleaning'], False)
-        self.assertEquals(args['db-dir'],'/tmp/new-db-1')
-        self.assertEquals(args['compression'], False)
-        self.assertEquals(args['debug'], True)
-        self.assertEquals(args['restart'], True)
+        self.assertEqual(args['chats_only'], False)
+        self.assertEqual(args['emails_only'], False)
+        self.assertEqual(args['command'],  'sync')
+        self.assertEqual(args['type'],     'custom')
+        self.assertEqual(args['email'],    self.login)
+        self.assertEqual(args['passwd'],   'not_seen')
+        self.assertEqual(args['oauth'],    'empty')
+        self.assertEqual(args['request'], {'req': 'subject:Chandeleur bis', 'type': 'gmail'})
+        self.assertEqual(args['host'],'imap.gmail.com')
+        self.assertEqual(args['port'], 993)
+        self.assertEqual(args['db-cleaning'], False)
+        self.assertEqual(args['db-dir'],'/tmp/new-db-1')
+        self.assertEqual(args['compression'], False)
+        self.assertEqual(args['debug'], True)
+        self.assertEqual(args['restart'], True)
         
         
     def zztest_cli_bad_server(self):
@@ -308,8 +308,8 @@ class TestGMVCMD(unittest.TestCase): #pylint:disable-msg=R0904
         try:
             _ = gmvaulter.parse_args()
         except SystemExit as err:
-            self.assertEquals(type(err), type(SystemExit()))
-            self.assertEquals(err.code, 2)
+            self.assertEqual(type(err), type(SystemExit()))
+            self.assertEqual(err.code, 2)
         except Exception as err:
             self.fail('unexpected exception: %s' % err)
         else:
@@ -329,15 +329,15 @@ class TestGMVCMD(unittest.TestCase): #pylint:disable-msg=R0904
         try:
             args = gmvaulter.parse_args()
             
-            self.assertEquals(args['command'],'sync')
-            self.assertEquals(args['type'],'full')
-            self.assertEquals(args['email'], self.login)
-            self.assertEquals(args['passwd'],'empty')
-            self.assertEquals(args['request'], {'req': 'Since 1-Nov-2011 Before 10-Nov-2011', 'type': 'imap'})
-            self.assertEquals(args['oauth'], 'not_seen')
-            self.assertEquals(args['host'],'imap.gmail.com')
-            self.assertEquals(args['port'], 993)
-            self.assertEquals(args['db-dir'],'./gmvault-db')
+            self.assertEqual(args['command'],'sync')
+            self.assertEqual(args['type'],'full')
+            self.assertEqual(args['email'], self.login)
+            self.assertEqual(args['passwd'],'empty')
+            self.assertEqual(args['request'], {'req': 'Since 1-Nov-2011 Before 10-Nov-2011', 'type': 'imap'})
+            self.assertEqual(args['oauth'], 'not_seen')
+            self.assertEqual(args['host'],'imap.gmail.com')
+            self.assertEqual(args['port'], 993)
+            self.assertEqual(args['db-dir'],'./gmvault-db')
             
         except SystemExit as err:
             self.fail("SystemExit Exception: %s"  % err)
@@ -364,13 +364,13 @@ class TestGMVCMD(unittest.TestCase): #pylint:disable-msg=R0904
         
         ids = gstorer.get_all_existing_gmail_ids()
         
-        self.assertEquals(len(ids), 5)
+        self.assertEqual(len(ids), 5)
         
-        self.assertEquals(ids, {1384403887202624608L: '2011-11', \
-                                1384486067720566818L: '2011-11', \
-                                1384313269332005293L: '2011-11', \
-                                1384545182050901969L: '2011-11', \
-                                1384578279292583731L: '2011-11'})
+        self.assertEqual(ids, {1384403887202624608: '2011-11', \
+                                1384486067720566818: '2011-11', \
+                                1384313269332005293: '2011-11', \
+                                1384545182050901969: '2011-11', \
+                                1384578279292583731: '2011-11'})
         
         #clean db dir
         delete_db_dir(args['db-dir'])
@@ -394,7 +394,7 @@ class TestGMVCMD(unittest.TestCase): #pylint:disable-msg=R0904
         
         credential = gmvault_launcher.get_credential(args, test_mode = {'activate': True, 'value' : 'a_password'}) #test_mode needed to avoid calling get_pass
     
-        self.assertEquals(credential, {'type': 'passwd', 'value': 'a_password'})
+        self.assertEqual(credential, {'type': 'passwd', 'value': 'a_password'})
         
         # store passwd and re-read it
         sys.argv = ['gmvault.py', '--imap-request', \
@@ -408,7 +408,7 @@ class TestGMVCMD(unittest.TestCase): #pylint:disable-msg=R0904
         
         credential = gmvault_launcher.get_credential(args, test_mode = {'activate': True, 'value' : 'a_new_password'})
         
-        self.assertEquals(credential, {'type': 'passwd', 'option': 'saved', 'value': 'a_new_password'})
+        self.assertEqual(credential, {'type': 'passwd', 'option': 'saved', 'value': 'a_new_password'})
         
         # now read the password
         sys.argv = ['gmvault.py', 'sync', '--imap-req', \
@@ -422,7 +422,7 @@ class TestGMVCMD(unittest.TestCase): #pylint:disable-msg=R0904
         
         credential = gmvault_launcher.get_credential(args, test_mode = {'activate': True, 'value' : "don't care"})
         
-        self.assertEquals(credential, {'type': 'passwd', 'option': 'read', 'value': 'a_new_password'})
+        self.assertEqual(credential, {'type': 'passwd', 'option': 'read', 'value': 'a_new_password'})
     
     
     def ztest_double_login(self):
@@ -463,7 +463,7 @@ class TestGMVCMD(unittest.TestCase): #pylint:disable-msg=R0904
 
         credential = credential_utils.CredentialHelper.get_credential(args)
 
-        print("CREDENTIALS:%s" % (credential))
+        print(("CREDENTIALS:%s" % (credential)))
 
         syncer = gmvault.GMVaulter(args['db-dir'], args['host'], args['port'], \
                                        args['email'], credential)
@@ -496,7 +496,7 @@ class TestGMVCMD(unittest.TestCase): #pylint:disable-msg=R0904
 
         credential = credential_utils.CredentialHelper.get_credential(args)
 
-        print("CREDENTIALS:%s" % (credential))
+        print(("CREDENTIALS:%s" % (credential)))
 
         syncer = gmvault.GMVaulter(args['db-dir'], args['host'], args['port'], \
                                        args['email'], credential)
@@ -602,7 +602,7 @@ class TestGMVCMD(unittest.TestCase): #pylint:disable-msg=R0904
         
         ids = gstorer.get_all_existing_gmail_ids()
         
-        self.assertEquals(len(ids), 9)
+        self.assertEqual(len(ids), 9)
         
         delete_db_dir('/tmp/new-db-1')
         
@@ -617,13 +617,13 @@ class TestGMVCMD(unittest.TestCase): #pylint:disable-msg=R0904
         
         ids = gstorer.get_all_existing_gmail_ids()
         
-        self.assertEquals(len(ids), 5)
+        self.assertEqual(len(ids), 5)
         
-        self.assertEquals(ids, {1384403887202624608L: '2011-11', \
-                                1384486067720566818L: '2011-11', \
-                                1384313269332005293L: '2011-11', \
-                                1384545182050901969L: '2011-11', \
-                                1384578279292583731L: '2011-11'})
+        self.assertEqual(ids, {1384403887202624608: '2011-11', \
+                                1384486067720566818: '2011-11', \
+                                1384313269332005293: '2011-11', \
+                                1384545182050901969: '2011-11', \
+                                1384578279292583731: '2011-11'})
         
         #clean db dir
         delete_db_dir('/tmp/new-db-1')

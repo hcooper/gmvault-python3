@@ -197,10 +197,10 @@ class GIMAPFetcher(object): #pylint:disable=R0902,R0904
     IMAP Class reading the information
     '''
     GMAIL_EXTENSION     = 'X-GM-EXT-1'  # GMAIL capability
-    GMAIL_ALL           = u'[Gmail]/All Mail' #GMAIL All Mail mailbox
+    GMAIL_ALL           = '[Gmail]/All Mail' #GMAIL All Mail mailbox
     
-    GENERIC_GMAIL_ALL   = u'\\AllMail' # unlocalised GMAIL ALL
-    GENERIC_DRAFTS      = u'\\Drafts' # unlocalised DRAFTS
+    GENERIC_GMAIL_ALL   = '\\AllMail' # unlocalised GMAIL ALL
+    GENERIC_DRAFTS      = '\\Drafts' # unlocalised DRAFTS
     GENERIC_GMAIL_CHATS = gmvault_const.GMAIL_UNLOCAL_CHATS   # unlocalised Chats names
     
     FOLDER_NAMES        = ['ALLMAIL', 'CHATS', 'DRAFTS']
@@ -585,7 +585,7 @@ class GIMAPFetcher(object): #pylint:disable=R0902,R0904
         listed_folders   = set([ directory.lower() for (_, _, directory) in self.list_all_folders() ])
         existing_folders = listed_folders.union(existing_folders)
         reserved_labels_map = gmvault_utils.get_conf_defaults().get_dict("Restore", "reserved_labels_map", \
-                              { u'migrated' : u'gmv-migrated', u'\muted' : u'gmv-muted' })
+                              { 'migrated' : 'gmv-migrated', '\muted' : 'gmv-muted' })
         
         
 
@@ -594,7 +594,7 @@ class GIMAPFetcher(object): #pylint:disable=R0902,R0904
         for lab in labels:
             #LOG.info("Reserved labels = %s\n" % (reserved_labels))
             #LOG.info("lab.lower = %s\n" % (lab.lower()))
-            if lab.lower() in reserved_labels_map.keys(): #exclude creation of migrated label
+            if lab.lower() in list(reserved_labels_map.keys()): #exclude creation of migrated label
                 n_lab = reserved_labels_map.get(lab.lower(), "gmv-default-label")
                 LOG.info("Warning ! label '%s' (lower or uppercase) is reserved by Gmail and cannot be used."\
                          "Use %s instead" % (lab, n_lab)) 
@@ -724,14 +724,14 @@ class GIMAPFetcher(object): #pylint:disable=R0902,R0904
         trash_folder_name = None
 
         for (flags, _, the_dir) in folders:
-            if (u'\\Starred' in flags) or (u'\\Spam' in flags) or (u'\\Sent' in flags) \
-               or (u'\\Important' in flags) or (the_dir == u'[Google Mail]/Chats') \
-               or (the_dir == u'[Google Mail]') or (u'\\Trash' in flags) or \
-               (u'\\Inbox' in flags) or (GIMAPFetcher.GENERIC_GMAIL_ALL in flags) or \
+            if ('\\Starred' in flags) or ('\\Spam' in flags) or ('\\Sent' in flags) \
+               or ('\\Important' in flags) or (the_dir == '[Google Mail]/Chats') \
+               or (the_dir == '[Google Mail]') or ('\\Trash' in flags) or \
+               ('\\Inbox' in flags) or (GIMAPFetcher.GENERIC_GMAIL_ALL in flags) or \
                (GIMAPFetcher.GENERIC_DRAFTS in flags) or (GIMAPFetcher.GENERIC_GMAIL_CHATS in flags):
                 LOG.info("Ignore folder %s" % (the_dir))           
 
-                if (u'\\Trash' in flags): #keep trash folder name
+                if ('\\Trash' in flags): #keep trash folder name
                     trash_folder_name = the_dir
             else:
                 LOG.info("Delete folder %s" % (the_dir))
@@ -847,12 +847,12 @@ class GIMAPFetcher(object): #pylint:disable=R0902,R0904
 
 
         try:
-           res = self.server.append(u'[Google Mail]/All Mail', a_body, a_flags, a_internal_time)
+           res = self.server.append('[Google Mail]/All Mail', a_body, a_flags, a_internal_time)
         except imaplib.IMAP4.abort as err:
            # handle issue when there are invalid characters (This is do to the presence of null characters)
            if str(err).find("APPEND => Invalid character in literal") >= 0:
               a_body = self._clean_email_body(a_body)
-              res    = self.server.append(u'[Google Mail]/All Mail', a_body, a_flags, a_internal_time)
+              res    = self.server.append('[Google Mail]/All Mail', a_body, a_flags, a_internal_time)
     
         LOG.debug("Appended data with flags %s and internal time %s. Operation time = %s.\nres = %s\n" \
                   % (a_flags, a_internal_time, the_t.elapsed_ms(), res))
@@ -875,7 +875,7 @@ class GIMAPFetcher(object): #pylint:disable=R0902,R0904
             #has labels so update email  
             the_t.start()
             LOG.debug("Before to store labels %s" % (labels_str))
-            self.server.select_folder(u'[Google Mail]/All Mail', readonly = self.readonly_folder) # go to current folder
+            self.server.select_folder('[Google Mail]/All Mail', readonly = self.readonly_folder) # go to current folder
             LOG.debug("Changing folders. elapsed %s s\n" % (the_t.elapsed_ms()))
             the_t.start()
             ret_code, data = self.server._imap.uid('STORE', result_uid, '+X-GM-LABELS', labels_str) #pylint: disable=W0212
@@ -885,7 +885,7 @@ class GIMAPFetcher(object): #pylint:disable=R0902,R0904
             
             LOG.debug("Stored Labels %s in gm_id %s" % (labels_str, result_uid))
 
-            self.server.select_folder(u'[Google Mail]/Drafts', readonly = self.readonly_folder) # go to current folder
+            self.server.select_folder('[Google Mail]/Drafts', readonly = self.readonly_folder) # go to current folder
         
             # check if it is ok otherwise exception
             if ret_code != 'OK':
@@ -899,7 +899,7 @@ def decode_labels(labels):
     """
     new_labels = []
     for label in labels:
-        if isinstance(label, (int, long, float, complex)):
+        if isinstance(label, (int, float, complex)):
             label = str(label) 
         new_labels.append(utf7_decode(label))
 
@@ -915,7 +915,7 @@ def utf7_encode(s): #pylint: disable=C0103
     r = [] #pylint: disable=C0103
     _in = []
     for c in s: #pylint: disable=C0103
-        if ord(c) in (range(0x20, 0x26) + range(0x27, 0x7f)):
+        if ord(c) in (list(range(0x20, 0x26)) + list(range(0x27, 0x7f))):
             if _in:
                 r.extend(['&', utf7_modified_base64(''.join(_in)), '-'])
                 del _in[:]
@@ -953,8 +953,8 @@ def utf7_decode(s): #pylint: disable=C0103
         r.append(utf7_modified_unbase64(''.join(decode[1:])))
     out = ''.join(r)
 
-    if not isinstance(out, unicode):
-        out = unicode(out, 'latin-1')
+    if not isinstance(out, str):
+        out = str(out, 'latin-1')
     return out
 
 

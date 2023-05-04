@@ -54,14 +54,14 @@ class TestEssentialGMVault(unittest.TestCase): #pylint:disable-msg=R0904
 
         imap_ids = gmvaulter.src.search({ 'type' : 'imap', 'req': req, 'charset': 'utf-8' })
  
-        print("imap_ids = %s\n" % (imap_ids))
+        print(("imap_ids = %s\n" % (imap_ids)))
         
          
     def test_restore_tricky_emails(self):
         """ Test_restore_tricky_emails. Restore emails with some specificities (japanese characters) in the a mailbox """
         gsync_credential    = { 'type' : 'passwd', 'value': self.gsync_passwd }
 
-        extra_labels = [u"My-Extra-Label"]
+        extra_labels = ["My-Extra-Label"]
 
         test_utils.clean_mailbox(self.gsync_login, gsync_credential)
 

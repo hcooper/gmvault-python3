@@ -128,7 +128,7 @@ class TestSandbox(unittest.TestCase): #pylint:disable-msg=R0904
         cipher.initCTR()
         decrypted = cipher.decryptCTR(crypted)
         
-        self.assertEquals(decrypted, content)
+        self.assertEqual(decrypted, content)
         
     def ztest_regexpr(self):
         """
@@ -142,7 +142,7 @@ class TestSandbox(unittest.TestCase): #pylint:disable-msg=R0904
         matched = reg.match(the_str)
         if matched:
             print("Matched")
-            print("subject=[%s],messageid=[%s]" % (matched.group('subject'), matched.group('msgid')))
+            print(("subject=[%s],messageid=[%s]" % (matched.group('subject'), matched.group('msgid'))))
             
     def ztest_is_encrypted_regexpr(self):
         """
@@ -173,7 +173,7 @@ class TestSandbox(unittest.TestCase): #pylint:disable-msg=R0904
             email_body = f.read()
         mail = email.message_from_string(email_body)
 
-        print mail
+        print(mail)
 
         sys.argv = ['gmvault.py', 'restore', '--db-dir',
                     '/Users/gaubert/gmvault-data/gmvault-db-bug',
@@ -216,9 +216,9 @@ class TestSandbox(unittest.TestCase): #pylint:disable-msg=R0904
             imap_fetch.push_email(None, None, None, None)
         #except Exception as err:
         except imaplib.IMAP4.error as err:
-            self.assertEquals('GIMAPFetcher cannot restore email in myaccount@gmail.com account.', str(err))
+            self.assertEqual('GIMAPFetcher cannot restore email in myaccount@gmail.com account.', str(err))
         
-        self.assertEquals(imap_fetch.connect_nb, 3)
+        self.assertEqual(imap_fetch.connect_nb, 3)
     
     def ztest_os_walk(self):
         """
@@ -226,7 +226,7 @@ class TestSandbox(unittest.TestCase): #pylint:disable-msg=R0904
         """
         import os
         for root, dirs, files in os.walk('/Users/gaubert/Dev/projects/gmvault/src/gmv/gmvault-db/db'):
-            print("root: %s, sub-dirs : %s, files = %s" % (root, dirs, files))
+            print(("root: %s, sub-dirs : %s, files = %s" % (root, dirs, files)))
     
     def ztest_get_subdir_info(self):
         """
@@ -247,12 +247,12 @@ class TestSandbox(unittest.TestCase): #pylint:disable-msg=R0904
         import gmv.gmvault_utils as gmvu
         
         for vals in gmvu.ordered_dirwalk('/home/aubert/gmvault-db.old/db', a_wildcards="*.meta"):
-            print("vals = %s\n" % (vals))
+            print(("vals = %s\n" % (vals)))
             pass
         
         import os
         for root, dirs, files in os.walk('/Users/gaubert/Dev/projects/gmvault/src/gmv/gmvault-db/db'):
-            print("root: %s, sub-dirs : %s, files = %s" % (root, dirs, files))
+            print(("root: %s, sub-dirs : %s, files = %s" % (root, dirs, files)))
             
             
     

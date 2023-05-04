@@ -26,19 +26,19 @@ def find_version(path):
         for line in f:
             index = line.find('GMVAULT_VERSION = "')
             if index > -1:
-                print(line[index+19:-2])
+                print((line[index+19:-2]))
                 res = line[index+19:-2]
                 return res.strip()
 
     raise Exception("Cannot find GMVAULT_VERSION in %s\n" % path)
 
 path = os.path.join(os.path.dirname(__file__), './src/gmv/gmvault_utils.py')
-print("PATH = %s\n" % path)
+print(("PATH = %s\n" % path))
 
 version = find_version(os.path.join(os.path.dirname(__file__),
                                     './src/gmv/gmvault_utils.py'))
 
-print("Gmvault version = %s\n" % version)
+print(("Gmvault version = %s\n" % version))
 README = os.path.join(os.path.dirname(__file__), './README.md')
 if os.path.exists(README):
     with open(README, 'r') as f:

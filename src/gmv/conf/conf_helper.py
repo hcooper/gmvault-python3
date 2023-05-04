@@ -104,7 +104,7 @@ class Resource(object):
                 #print "i = %d, val = %s\n"%(i,sys.argv[i])
                 if len(sys.argv) <= i:
                     # No more thing to read in the command line so quit
-                    print "Resource: Commandline argument %s has no value\n" % (self._cli_arg)
+                    print("Resource: Commandline argument %s has no value\n" % (self._cli_arg))
                     return None 
                 else:
                     #print "i+1 = %d, val = %s\n"%(i+1,sys.argv[i+1])
@@ -243,7 +243,7 @@ class Resource(object):
         """
         val = self.get_value()
         if val.lower() not in self._boolean_states:
-            raise ValueError, 'Not a boolean: %s' % val
+            raise ValueError('Not a boolean: %s' % val)
         return self._boolean_states[val.lower()]
 
 class MockConf(object):
@@ -410,8 +410,8 @@ class Conf(object):
             self._configuration_file_path = a_file
 
         except Exception as exce:
-            print "Can't read the config file %s" % a_file
-            print "Current executing from dir = %s\n" % os.getcwd()
+            print("Can't read the config file %s" % a_file)
+            print("Current executing from dir = %s\n" % os.getcwd())
             raise exce
 
     def get_conf_file_path(self):
@@ -421,7 +421,7 @@ class Conf(object):
     def sections(self):
         """Return a list of section names, excluding [DEFAULT]"""
         # self._sections will never have [DEFAULT] in it
-        return self._sections.keys()
+        return list(self._sections.keys())
     
     @classmethod
     def _get_defaults(cls, section, option, default, fail_if_missing):
@@ -522,7 +522,7 @@ class Conf(object):
             if "__name__" in a_copy:
                 del a_copy["__name__"]
                 
-            return a_copy.items()
+            return list(a_copy.items())
         
         except KeyError:
             raise exceptions.NoSectionError(section)
@@ -682,14 +682,14 @@ class Conf(object):
         """getboolean value""" 
         val = self.get(section, option, default, fail_if_missing)
         if val.lower() not in self._boolean_states:
-            raise ValueError, 'Not a boolean: %s' % val
+            raise ValueError('Not a boolean: %s' % val)
         return self._boolean_states[val.lower()]
     
     def get_boolean(self, section, option, default=False, fail_if_missing=False):
         """get_boolean value"""
         val = self.get(section, option, default, fail_if_missing)
         if val.lower() not in self._boolean_states:
-            raise ValueError, 'Not a boolean: %s' % val
+            raise ValueError('Not a boolean: %s' % val)
         return self._boolean_states[val.lower()]
     
     def get_list(self, section, option, default=None, fail_if_missing=False):
